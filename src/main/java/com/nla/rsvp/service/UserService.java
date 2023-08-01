@@ -1,12 +1,10 @@
 package com.nla.rsvp.service;
 
 import com.nla.rsvp.constant.Role;
-import com.nla.rsvp.data.AuthenticationResponse;
 import com.nla.rsvp.data.RegisterRequest;
 import com.nla.rsvp.entity.User;
 import com.nla.rsvp.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
