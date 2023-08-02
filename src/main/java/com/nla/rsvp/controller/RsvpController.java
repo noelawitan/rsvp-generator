@@ -1,5 +1,7 @@
 package com.nla.rsvp.controller;
 
+import com.nla.rsvp.data.EventRequest;
+import com.nla.rsvp.data.EventResponse;
 import com.nla.rsvp.entity.Event;
 import com.nla.rsvp.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +14,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/events")
-public class RsvpController {
+public class RsvpController extends BasicController {
 
     @Autowired
     private EventService eventService;
@@ -23,44 +25,57 @@ public class RsvpController {
     }
 
     @GetMapping("")
-    public List<Event> getAllEvents() {
-        return eventService.getAllEvents();
+    public ResponseEntity<List<EventResponse>> getAllEvents() {
+        List<Event> events = eventService.getAllEventsOfUser(getCurrentUser());
+        return ResponseEntity.ok(convertToList(events, EventResponse.class));
     }
 
     @GetMapping("/{eventId}")
-    public ResponseEntity<Event> getEventById(@PathVariable Long eventId) {
+    public ResponseEntity<EventResponse> getEventById(@PathVariable Long eventId) {
         Optional<Event> eventOptional = eventService.getEventById(eventId);
-        return eventOptional.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        if (eventOptional.isPresent()) {
+            Event event = eventOptional.get();
+            if (event.getUser().equals(getCurrentUser())) {
+                return ResponseEntity.ok(convert(event, EventResponse.class));
+            }
+        }
+        return ResponseEntity.notFound().build();
 
     }
 
     @PostMapping
-    public ResponseEntity<Event> createEvent(@RequestBody Event event) {
+    public ResponseEntity<EventResponse> createEvent(@RequestBody EventRequest eventRequest) {
+        Event event = convert(eventRequest, Event.class);
+        event.setUser(getCurrentUser());
         event = eventService.saveEvent(event);
-        if(ObjectUtils.isEmpty(event)) {
+
+        if (ObjectUtils.isEmpty(event)) {
             return ResponseEntity.internalServerError().build();
         }
-        return ResponseEntity.ok(event);
+
+        return ResponseEntity.ok(convert(event, EventResponse.class));
     }
 
     @PutMapping("/{eventId}")
-    public ResponseEntity<Event> updateEvent(@PathVariable Long eventId, @RequestBody Event updatedEvent) {
+    public ResponseEntity<EventResponse> updateEvent(@PathVariable Long eventId, @RequestBody EventRequest updatedEvent) {
         Optional<Event> eventOptional = eventService.getEventById(eventId);
-        ResponseEntity<Event> responseEntity = ResponseEntity.notFound().build();
-        if(eventOptional.isPresent()) {
-            Event event = eventOptional.get();
-            event.setName(updatedEvent.getName());
-            event.setDate(updatedEvent.getDate());
-            event.setStartTime(updatedEvent.getStartTime());
-            event.setEndTime(updatedEvent.getEndTime());
-            event.setLocation(updatedEvent.getLocation());
-            event.setInvitations(updatedEvent.getInvitations());
 
-            event = eventService.saveEvent(event);
-            if(ObjectUtils.isEmpty(event)) {
-                responseEntity = ResponseEntity.internalServerError().build();
+        ResponseEntity<EventResponse> responseEntity = ResponseEntity.notFound().build();
+
+        if (eventOptional.isPresent()) {
+            Event event = eventOptional.get();
+            if (event.getUser().equals(getCurrentUser())) {
+                merge(updatedEvent, event);
+
+                event = eventService.saveEvent(event);
+                if (ObjectUtils.isEmpty(event)) {
+                    responseEntity = ResponseEntity.internalServerError().build();
+                } else {
+                    convert(event, EventResponse.class);
+                    responseEntity = ResponseEntity.ok(convert(event, EventResponse.class));
+                }
             } else {
-                responseEntity = ResponseEntity.ok(event);
+                responseEntity = ResponseEntity.notFound().build();
             }
         }
 
@@ -70,10 +85,14 @@ public class RsvpController {
     @DeleteMapping("/{eventId}")
     public ResponseEntity<Void> deleteEvent(@PathVariable Long eventId) {
         Optional<Event> eventOptional = eventService.getEventById(eventId);
-        if(eventOptional.isPresent()) {
+        if (eventOptional.isPresent()) {
             final Event event = eventOptional.get();
-            eventService.deleteEvent(event.getId());
-            return ResponseEntity.ok().build();
+            if (event.getUser().equals(getCurrentUser())) {
+                eventService.deleteEvent(event.getId());
+                return ResponseEntity.ok().build();
+            } else {
+                return ResponseEntity.notFound().build();
+            }
         }
         return ResponseEntity.internalServerError().build();
     }

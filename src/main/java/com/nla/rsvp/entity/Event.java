@@ -32,6 +32,9 @@ public class Event {
     @Column(name = "LOCATION")
     private String location;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    private User user;
+
     @OneToMany(mappedBy = "event", cascade = CascadeType.REMOVE)
     private List<Invitation> invitations = new ArrayList<>();
 }
