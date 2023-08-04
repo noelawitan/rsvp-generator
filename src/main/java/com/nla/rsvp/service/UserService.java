@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -18,27 +17,23 @@ public class UserService {
 
     private final PasswordEncoder passwordEncoder;
 
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
-    }
-
-    public Optional<User> getUserById(Long id) {
+    public Optional<User> getById(Long id) {
         return userRepository.findById(id);
     }
 
-    public User saveUser(User user) {
+    public User save(User user) {
         return userRepository.save(user);
     }
 
-    public void deleteUser(Long id) {
+    public void delete(Long id) {
         userRepository.deleteById(id);
     }
 
-    public Optional<User> getUserByEmail(String email) {
+    public Optional<User> getByEmail(String email) {
         return userRepository.findByEmail(email);
     }
 
-    public User registerUser(RegisterRequest registerRequest) {
+    public User register(RegisterRequest registerRequest) {
         User newUser = new User();
         newUser.setFirstName(registerRequest.getFirstName());
         newUser.setMiddleName(registerRequest.getMiddleName());

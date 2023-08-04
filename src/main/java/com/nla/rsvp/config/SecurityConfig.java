@@ -26,7 +26,7 @@ public class SecurityConfig {
                 .csrf()
                 .disable()
                 .authorizeHttpRequests()
-                .requestMatchers(new AntPathRequestMatcher("/api/auth/**"))
+                .requestMatchers(new AntPathRequestMatcher("/auth/**"))
                 .permitAll()
                 .anyRequest()
                 .authenticated()
@@ -36,6 +36,7 @@ public class SecurityConfig {
                 .and()
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
         return httpSecurity.build();
     }
 }

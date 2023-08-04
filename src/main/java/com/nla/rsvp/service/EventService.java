@@ -14,19 +14,19 @@ public class EventService {
     @Autowired
     private EventRepository eventRepository;
 
-    public List<Event> getAllEventsOfUser(User user) {
+    public List<Event> getAllByUser(User user) {
         return eventRepository.findByUser(user);
     }
 
-    public Optional<Event> getEventById(Long id) {
+    public Optional<Event> getById(Long id) {
         return eventRepository.findById(id);
     }
 
-    public Event saveEvent(Event event) {
+    public Event save(Event event) {
         return eventRepository.save(event);
     }
 
-    public void deleteEvent(Long id) {
+    public void delete(Long id) {
         eventRepository.deleteById(id);
     }
 }

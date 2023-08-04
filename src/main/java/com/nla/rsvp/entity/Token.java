@@ -3,6 +3,7 @@ package com.nla.rsvp.entity;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Data
@@ -13,17 +14,20 @@ public class Token {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
     @Column(name = "TOKEN_VALUE", unique = true, nullable = false)
     private String tokenValue;
 
+    @NotNull
     @Column(name = "EXPIRATION_DATE", nullable = false)
-    private LocalDateTime expiratationDate;
+    private LocalDateTime expirationDate;
 
+    @NotNull
     @Column(name = "EXPIRED", nullable = false)
-    private boolean expired;
+    private Boolean expired;
 
     @Column(name = "REVOKE_TOKEN", nullable = false)
-    private boolean revokeToken;
+    private Boolean revokeToken;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")

@@ -15,16 +15,15 @@ public class TokenService {
     @Autowired
     private TokenRepository tokenRepository;
 
-    public Token createToken(User user, String tokenStr) {
+    public void createToken(User user, String tokenStr) {
         Token token = new Token();
         token.setTokenValue(tokenStr);
         token.setExpired(false);
         token.setRevokeToken(false);
-        token.setExpiratationDate(LocalDateTime.now());
+        token.setExpirationDate(LocalDateTime.now());
         token.setUser(user);
         tokenRepository.save(token);
 
-        return token;
     }
 
     public void revokeAllUserTokens(User user) {

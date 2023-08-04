@@ -25,11 +25,14 @@ public class AuthenticationService {
         final String token = jwtService.generateToken(user);
         final String refreshToken = jwtService.generateRefreshToken(user);
 
-        return new AuthenticationResponse(token, refreshToken);
+        return AuthenticationResponse.builder()
+                .accessToken(token)
+                .refreshToken(refreshToken)
+                .build();
     }
 
     public AuthenticationResponse register(RegisterRequest registerRequest) {
-        User user = userService.registerUser(registerRequest);
+        User user = userService.register(registerRequest);
         String token = jwtService.generateToken(user);
         String refreshToken = jwtService.generateRefreshToken(user);
 
@@ -47,7 +50,7 @@ public class AuthenticationService {
                         request.getPassword()
                 )
         );
-        User user = userService.getUserByEmail(request.getEmail())
+        User user = userService.getByEmail(request.getEmail())
                 .orElseThrow();
 
         String jwtToken = jwtService.generateToken(user);
@@ -55,6 +58,7 @@ public class AuthenticationService {
 
         tokenService.revokeAllUserTokens(user);
         tokenService.createToken(user, jwtToken);
+
         return AuthenticationResponse.builder()
                 .accessToken(jwtToken)
                 .refreshToken(refreshToken)

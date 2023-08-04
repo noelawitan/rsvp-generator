@@ -1,6 +1,7 @@
 package com.nla.rsvp.service;
 
 import com.nla.rsvp.entity.Guest;
+import com.nla.rsvp.entity.User;
 import com.nla.rsvp.repository.GuestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,19 +14,19 @@ public class GuestService {
     @Autowired
     private GuestRepository guestRepository;
 
-    public List<Guest> getAllGuests() {
-        return guestRepository.findAll();
+    public List<Guest> getAllByUser(User user) {
+        return guestRepository.findByUser(user);
     }
 
-    public Optional<Guest> getGuestById(Long id) {
+    public Optional<Guest> getById(Long id) {
         return guestRepository.findById(id);
     }
 
-    public Guest saveGuest(Guest guest) {
+    public Guest save(Guest guest) {
         return guestRepository.save(guest);
     }
 
-    public void deleteGuest(Long id) {
+    public void delete(Long id) {
         guestRepository.deleteById(id);
     }
 }
