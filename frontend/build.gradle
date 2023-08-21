@@ -1,0 +1,27 @@
+plugins {
+    id "com.github.node-gradle.node" version "3.1.1"
+}
+
+node {
+    version = '18.17.0'
+    npmVersion = '9.1.2'
+    download = true
+}
+
+task frontendNpmInstall(type: NpmTask) {
+    args = ['install']
+}
+
+task frontendBuildVueJs(type: NpmTask, dependsOn: frontendNpmInstall) {
+    args = ['run', 'build']
+}
+
+task frontendCopyToStatic(type: Copy) {
+    from "$projectDir/dist"
+    into "$projectDir/../backend/src/main/resources/static"
+    dependsOn frontendBuildVueJs
+}
+
+build {
+    dependsOn frontendCopyToStatic
+}

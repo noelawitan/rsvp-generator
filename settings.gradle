@@ -1,1 +1,3 @@
 rootProject.name = 'rsvp-generator'
+include 'frontend'
+include 'backend'
