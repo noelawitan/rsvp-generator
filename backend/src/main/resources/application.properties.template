@@ -1,0 +1,28 @@
+spring.autoconfigure.exclude=org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
+spring.datasource.url=jdbc:mysql://<YOUR_HOST_URL>:<PORT>/<DB_NAME>
+spring.datasource.username=<USER_NAME>
+spring.datasource.password=<PASSWORD>
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+spring.jpa.database-platform=org.hibernate.dialect.MySQL8Dialect
+spring.jpa.show-sql=false
+spring.jpa.hibernate.ddl-auto=validate
+debug=false
+
+#JWT Related Configurations
+jwt.secret-key=<YOUR_SECRET_KEY>
+jwt.refresh-token.expiration=<TOKEN_EXP_MILLIS>
+jwt.expiration=<EXPIRATION_MILLIS>
+
+#server.ssl.key-store-type=PKCS12
+#server.ssl.key-store=<DIR_OF_SSL_KEY>
+#server.ssl.key-store-password=<SSL_PASSWORD>
+#server.ssl.key-alias=<SSL_ALIAS>
+
+# Enable HTTPS
+server.port=<SERVER_PORT>
+server.servlet.context-path=/api
+
+cors.allowed.origins=<ORIGINS_URL>
+
+
+#server.ssl.enabled=true
