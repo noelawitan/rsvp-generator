@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,13 +47,17 @@ public class GuestController extends BaseController {
     }
 
     @PostMapping
-    public ResponseEntity<GuestResponse> createGuest(@RequestBody GuestRequest guestRequest) {
-        Guest guest = convert(guestRequest, Guest.class);
+    public ResponseEntity<List<GuestResponse>> createGuests(@RequestBody List<GuestRequest> guestRequests) {
+        List<GuestResponse> guestResponses = new ArrayList<>();
 
-        guest.setUser(getCurrentUser());
-        guest = guestService.save(guest);
+        for (GuestRequest guestRequest : guestRequests) {
+            Guest guest = convert(guestRequest, Guest.class);
+            guest.setUser(getCurrentUser());
+            guest = guestService.save(guest);
+            guestResponses.add(convert(guest, GuestResponse.class));
+        }
 
-        return ResponseEntity.ok(convert(guest, GuestResponse.class));
+        return ResponseEntity.ok(guestResponses);
     }
 
     @PutMapping("/{guestId}")
