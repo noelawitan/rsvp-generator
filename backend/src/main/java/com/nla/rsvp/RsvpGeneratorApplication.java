@@ -11,7 +11,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class RsvpGeneratorApplication {
 
 	@Value("${cors.allowed.origins}")
-	private String corsAllowedOrigins;
+	private String[] corsAllowedOrigins;
 
 	public static void main(String[] args) {
 		SpringApplication.run(RsvpGeneratorApplication.class, args);
@@ -23,7 +23,9 @@ public class RsvpGeneratorApplication {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
 				registry.addMapping("/**")
-						.allowedOrigins(corsAllowedOrigins);
+						.allowedOrigins(corsAllowedOrigins)
+						.allowedMethods("GET", "POST", "PUT", "DELETE")
+						.allowedHeaders("*");
 			}
 		};
 	}
