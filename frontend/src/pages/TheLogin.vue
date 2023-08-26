@@ -2,16 +2,17 @@
   <div class="login-container">
     <div class="div-center">
       <div class="content">
-        <h3>Login</h3>
+        <h3>Rsvp Login</h3>
         <hr/>
         <form @submit.prevent.stop="login">
+          <div v-if="errorLogin" class="text-danger">{{ errorLogin }}</div>
           <div class="form-group">
             <label for="email">Email address</label>
-            <input type="email" class="form-control" id="email" placeholder="Email" v-model="email">
+            <input type="email" class="form-control" id="email" placeholder="Email" v-model="email" required>
           </div>
           <div class="form-group">
             <label for="password">Password</label>
-            <input type="password" class="form-control" id="password" placeholder="Password" v-model="password">
+            <input type="password" class="form-control" id="password" placeholder="Password" v-model="password" required>
           </div>
           <div class="form-group text-center mt-2">
             <button type="submit" class="btn btn-primary">Login</button>
@@ -29,7 +30,8 @@ export default {
   data() {
     return {
       email: '',
-      password: ''
+      password: '',
+      errorLogin: ''
     }
   },
   methods: {
@@ -55,7 +57,7 @@ export default {
 
         this.$router.push('/dashboard');
       } else {
-        console.error('Authentication failed');
+        this.errorLogin = "Incorrect credentials";
       }
     }
   }
