@@ -1,10 +1,11 @@
-import { createRouter, createWebHistory } from 'vue-router';
+import {createRouter, createWebHistory} from 'vue-router';
 import TheLogin from '@/pages/TheLogin.vue';
 import TheDashboard from '@/pages/TheDashboard.vue';
 
 const routes = [
-    { path: '/login', component: TheLogin },
-    { path: '/dashboard', component: TheDashboard, meta: { requiresAuth: true } }
+    {path: '/login', component: TheLogin, meta: {guestOnly: true}},
+    {path: '/dashboard', component: TheDashboard, meta: {requiresAuth: true}},
+    {path: '/', redirect: '/login'},
 ];
 
 const router = createRouter({
@@ -14,19 +15,23 @@ const router = createRouter({
 
 function isAuthenticated() {
     const accessToken = localStorage.getItem('access_token');
-
-    if (accessToken) {
-        //TODO: Add server side check to be sure that access_token is still valid.
-        return true;
-    }
-
-    return false;
+    return !!accessToken;
 }
 
-
 router.beforeEach((to, from, next) => {
-    if (to.matched.some(record => record.meta.requiresAuth) && !isAuthenticated()) {
-        next('/login');
+
+    if (to.matched.some(record => record.meta.requiresAuth)) {
+        if (!isAuthenticated()) {
+            next('/login');
+        } else {
+            next();
+        }
+    } else if (to.matched.some(record => record.meta.guestOnly)) {
+        if (isAuthenticated()) {
+            next('/dashboard');
+        } else {
+            next();
+        }
     } else {
         next();
     }
