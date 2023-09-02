@@ -1,12 +1,15 @@
 import {createRouter, createWebHistory} from 'vue-router';
 import TheLogin from '@/pages/TheLogin.vue';
 import TheDashboard from '@/pages/TheDashboard.vue';
+import EventDetail from "@/components/EventDetail.vue";
 
 const routes = [
     {path: '/login', component: TheLogin, meta: {guestOnly: true}},
     {path: '/dashboard', component: TheDashboard, meta: {requiresAuth: true}},
-    {path: '/', redirect: '/login'},
+    {path: '/event-detail/:id', component: EventDetail, meta: {requiresAuth: true}},
+    {path: '/', redirect: '/login'}
 ];
+
 
 const router = createRouter({
     history: createWebHistory(),

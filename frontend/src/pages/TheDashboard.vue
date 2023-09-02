@@ -4,22 +4,22 @@
     <div id="eventSection" class="mt-5 p-10">
       <div class="d-flex justify-content-between align-items-center">
         <h3>Events</h3>
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createEventModal">
-          <i class="fa fa-plus me-1" />Create Event
+        <button type="button" class="btn btn-primary" @click="showCreateEventModal">
+          <i class="fa fa-plus me-1"/>Create Event
         </button>
       </div>
       <hr/>
       <event-list ref="eventListRef"></event-list>
-      <create-event-modal @submittedEvent="handleSubmittedEvent"></create-event-modal>
+      <create-event-modal ref="createEventModalRef" @submittedEvent="handleSubmittedEvent"></create-event-modal>
     </div>
   </div>
 </template>
+
 <script>
 import EventList from '@/components/EventList.vue';
 import CreateEventModal from "@/components/CreateEventModal.vue";
-import TheNavbar from "@/components/TheNavbar.vue";
-import Modal from 'bootstrap/js/dist/modal';
 import {EVENT_URL} from "@/config/config.js";
+import TheNavbar from "@/components/TheNavbar.vue";
 
 export default {
   components: {
@@ -50,19 +50,8 @@ export default {
             })
             .then(data => {
               if (data !== null) {
-                //Close the CreateEventModal
-                const modalElement = document.getElementById('createEventModal');
-                const modalBackdrops = document.getElementsByClassName('modal-backdrop');
-                const modalInstance = Modal.getInstance(modalElement);
-
-                if (modalInstance) {
-                  this.$refs.eventListRef.getAllUserEvents();
-                  modalInstance.hide();
-
-                  while (modalBackdrops.length > 0) {
-                    modalBackdrops[0].remove();
-                  }
-                }
+                this.$refs.createEventModalRef.hide();
+                this.$refs.eventListRef.getAllUserEvents();
               }
             })
             .catch((error) => {
@@ -72,6 +61,9 @@ export default {
       } else {
         this.$router.push('/login');
       }
+    },
+    showCreateEventModal() {
+      this.$refs.createEventModalRef.show();
     }
   }
 }

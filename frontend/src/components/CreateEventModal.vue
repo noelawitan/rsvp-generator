@@ -34,7 +34,7 @@
             </div>
             <div class="text-center">
               <button type="submit" class="btn btn-primary me-1">Create</button>
-              <button type="button" class="btn btn-secondary ms-1" data-bs-dismiss="modal">Cancel</button>
+              <button type="button" class="btn btn-secondary ms-1" @click="hide">Cancel</button>
             </div>
           </form>
         </div>
@@ -44,17 +44,11 @@
 </template>
 
 <script>
+import Modal from "bootstrap/js/dist/modal";
 export default {
-  mounted() {
-    const modal = this.$refs.myModal;
-    modal.addEventListener('hidden.bs.modal', this.clearData);
-  },
-  beforeUnmount() {
-    const modal = this.$refs.myModal;
-    modal.removeEventListener('hidden.bs.modal', this.clearData);
-  },
   data() {
     return {
+      createEventModal: null,
       event: {
         name: '',
         location: '',
@@ -65,6 +59,9 @@ export default {
       eventNameError: '',
       eventLocationError: ''
     };
+  },
+  mounted() {
+    this.createEventModal = new Modal('#createEventModal');
   },
   methods: {
     createEvent() {
@@ -99,6 +96,13 @@ export default {
       };
       this.eventNameError = '';
       this.eventLocationError = '';
+    },
+    show() {
+      this.clearData();
+      this.createEventModal.show();
+    },
+    hide() {
+      this.createEventModal.hide();
     }
   }
 };

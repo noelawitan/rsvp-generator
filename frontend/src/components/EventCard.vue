@@ -23,7 +23,7 @@
             </span>
           </div>
           <div class="mt-3">
-            <button class="btn btn-primary">Details</button>
+            <button class="btn btn-primary" @click="goToEventDetail">Details</button>
           </div>
         </div>
       </div>
@@ -62,8 +62,7 @@ export default {
   },
   methods: {
     goToEventDetail() {
-      //TODO: create event-details that passes the id of this card.
-      //this.$router.push('/event-details', this.id);
+      this.$router.push({ path: `/event-detail/${this.id}` });
     }
   }
 }
