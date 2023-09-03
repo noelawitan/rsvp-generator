@@ -69,7 +69,7 @@
 <script>
 import TheNavbar from "@/components/TheNavbar.vue";
 import {EVENT_URL} from "@/config/config.js";
-import UpdateEventModal from "@/components/UpdateEventModal.vue";
+import UpdateEventModal from "@/components/event/UpdateEventModal.vue";
 
 export default {
   components: {UpdateEventModal, TheNavbar},

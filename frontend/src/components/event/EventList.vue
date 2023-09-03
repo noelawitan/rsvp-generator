@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import EventCard from "@/components/EventCard.vue";
+import EventCard from "@/components/event/EventCard.vue";
 import {EVENT_URL} from "@/config/config.js";
 
 export default {
@@ -47,8 +47,8 @@ export default {
         })
             .then(response => {
               if (response.status === 403) {
+                localStorage.clear();
                 this.$router.push('/login');
-                return;
               }
 
               return response.json();

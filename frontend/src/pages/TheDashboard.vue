@@ -16,8 +16,8 @@
 </template>
 
 <script>
-import EventList from '@/components/EventList.vue';
-import CreateEventModal from "@/components/CreateEventModal.vue";
+import EventList from '@/components/event/EventList.vue';
+import CreateEventModal from "@/components/event/CreateEventModal.vue";
 import {EVENT_URL} from "@/config/config.js";
 import TheNavbar from "@/components/TheNavbar.vue";
 
