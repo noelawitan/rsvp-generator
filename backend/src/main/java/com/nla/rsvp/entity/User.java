@@ -1,5 +1,6 @@
 package com.nla.rsvp.entity;
 
+import com.nla.rsvp.constant.Gender;
 import com.nla.rsvp.constant.Role;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
@@ -36,6 +37,11 @@ public class User implements UserDetails {
     @Size(max = 50)
     @Column(name = "MIDDLE_NAME")
     private String middleName;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "GENDER", nullable = false)
+    private Gender gender;
 
     @Email
     @Column(name = "EMAIL", nullable = false, unique = true)

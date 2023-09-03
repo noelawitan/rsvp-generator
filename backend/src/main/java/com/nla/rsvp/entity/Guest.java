@@ -1,5 +1,6 @@
 package com.nla.rsvp.entity;
 
+import com.nla.rsvp.constant.Gender;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -30,6 +31,11 @@ public class Guest {
     @Size(max = 50)
     @Column(name = "MIDDLE_NAME")
     private String middleName;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "GENDER", nullable = false)
+    private Gender gender;
 
     @Email
     @Column(name = "EMAIL")

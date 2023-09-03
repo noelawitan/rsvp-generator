@@ -3,6 +3,7 @@ package com.nla.rsvp.controller;
 import com.nla.rsvp.data.AuthenticationRequest;
 import com.nla.rsvp.data.AuthenticationResponse;
 import com.nla.rsvp.data.RegisterRequest;
+import com.nla.rsvp.entity.User;
 import com.nla.rsvp.service.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -10,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
-public class AuthenticationController {
+public class AuthenticationController extends BaseController {
 
     @Autowired
     private AuthenticationService authenticateService;
@@ -22,7 +23,8 @@ public class AuthenticationController {
 
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> registerUser(@RequestBody RegisterRequest registerRequest) {
-        return ResponseEntity.ok(authenticateService.register(registerRequest));
+        User user = convert(registerRequest, User.class);
+        return ResponseEntity.ok(authenticateService.register(user));
     }
 
     @PostMapping("/authenticate")

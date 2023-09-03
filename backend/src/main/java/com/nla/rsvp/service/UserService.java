@@ -33,14 +33,8 @@ public class UserService {
         return userRepository.findByEmail(email);
     }
 
-    public User register(RegisterRequest registerRequest) {
-        User newUser = new User();
-        newUser.setFirstName(registerRequest.getFirstName());
-        newUser.setMiddleName(registerRequest.getMiddleName());
-        newUser.setLastName(registerRequest.getLastName());
-        newUser.setDateOfBirth(registerRequest.getDateOfBirth());
-        newUser.setEmail(registerRequest.getEmail());
-        newUser.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
+    public User register(User newUser) {
+        newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
         newUser.setRole(Role.USER);
 
         return userRepository.save(newUser);

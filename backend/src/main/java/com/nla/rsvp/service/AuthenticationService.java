@@ -31,8 +31,8 @@ public class AuthenticationService {
                 .build();
     }
 
-    public AuthenticationResponse register(RegisterRequest registerRequest) {
-        User user = userService.register(registerRequest);
+    public AuthenticationResponse register(User user) {
+        user = userService.register(user);
         String token = jwtService.generateToken(user);
         String refreshToken = jwtService.generateRefreshToken(user);
 
