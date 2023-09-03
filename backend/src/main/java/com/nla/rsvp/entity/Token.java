@@ -1,6 +1,7 @@
 package com.nla.rsvp.entity;
 
 import lombok.Data;
+import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -29,6 +30,7 @@ public class Token {
     @Column(name = "REVOKE_TOKEN", nullable = false)
     private Boolean revokeToken;
 
+    @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;

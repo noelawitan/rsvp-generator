@@ -1,6 +1,8 @@
 package com.nla.rsvp.entity;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -39,10 +41,13 @@ public class Event {
     @Column(name = "LOCATION")
     private String location;
 
+    @ToString.Exclude
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
-    @OneToMany(mappedBy = "event", cascade = CascadeType.REMOVE)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
     private List<Invitation> invitations = new ArrayList<>();
 }

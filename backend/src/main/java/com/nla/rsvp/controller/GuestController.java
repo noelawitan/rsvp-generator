@@ -32,7 +32,7 @@ public class GuestController extends BaseController {
     }
 
     @GetMapping("/{guestId}")
-    public ResponseEntity<GuestResponse> getById(@PathVariable Long guestId) {
+    public ResponseEntity<GuestResponse> getById(@PathVariable("guestId") Long guestId) {
         Optional<Guest> guestOptional = guestService.getById(guestId);
 
         if (guestOptional.isPresent()) {
@@ -61,7 +61,7 @@ public class GuestController extends BaseController {
     }
 
     @PutMapping("/{guestId}")
-    public ResponseEntity<GuestResponse> updateGuest(@PathVariable Long guestId, @RequestBody GuestRequest guestRequest) {
+    public ResponseEntity<GuestResponse> updateGuest(@PathVariable("guestId") Long guestId, @RequestBody GuestRequest guestRequest) {
         Optional<Guest> guestOptional = guestService.getById(guestId);
 
         if (guestOptional.isPresent()) {
@@ -80,7 +80,7 @@ public class GuestController extends BaseController {
     }
 
     @DeleteMapping("/{guestId}")
-    public ResponseEntity<GuestResponse> deleteGuest(@PathVariable Long guestId) {
+    public ResponseEntity<GuestResponse> deleteGuest(@PathVariable("guestId") Long guestId) {
         Optional<Guest> guestOptional = guestService.getById(guestId);
 
         if (guestOptional.isPresent()) {

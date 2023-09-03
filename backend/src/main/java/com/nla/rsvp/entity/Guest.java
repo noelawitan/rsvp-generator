@@ -2,6 +2,8 @@ package com.nla.rsvp.entity;
 
 import com.nla.rsvp.constant.Gender;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -44,9 +46,12 @@ public class Guest {
     @Column(name = "PHONE_NUMBER")
     private String phoneNumber;
 
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "guest", cascade = CascadeType.REMOVE)
     private List<Invitation> invitations = new ArrayList<>();
 
+    @ToString.Exclude
     @NotNull
     @ManyToOne(fetch = FetchType.EAGER)
     private User user;

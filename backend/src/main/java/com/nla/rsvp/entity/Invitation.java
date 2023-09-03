@@ -1,6 +1,8 @@
 package com.nla.rsvp.entity;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -15,36 +17,30 @@ public class Invitation {
     private Long id;
 
     @NotNull
+    private String publicId;
+
+    @NotNull
     @ManyToOne(fetch = FetchType.EAGER)
     private Event event;
 
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @NotNull
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Guest guest;
 
-    @NotNull
-    @Column(nullable = false)
     private Boolean attending;
 
-    @NotNull
-    @Column(nullable = false)
     private Integer numberOfGuest;
 
-    @NotNull
-    @Column(name = "SEND_DATE", nullable = false)
+    @Column(name = "SEND_DATE")
     private LocalDateTime sentDate;
 
     @Column(name = "DEADLINE")
     private LocalDateTime deadLine;
 
-    @PrePersist
-    public void prePersist() {
-        if (attending == null) {
-            attending = false;
-        }
-
-        if(numberOfGuest == null) {
-            numberOfGuest = 0;
-        }
-    }
+    @ToString.Exclude
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY)
+    private User user;
 }

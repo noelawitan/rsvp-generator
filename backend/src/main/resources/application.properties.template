@@ -10,8 +10,8 @@ debug=false
 
 #JWT Related Configurations
 jwt.secret-key=<YOUR_SECRET_KEY>
-jwt.refresh-token.expiration=<TOKEN_EXP_MILLIS>
-jwt.expiration=<EXPIRATION_MILLIS>
+jwt.refresh.token.expiration.hours=<REFRESH_TOKEN_EXPIRATION_IN_HOURS>
+jwt.expiration.hours=<TOKEN_EXPIRATION_IN_HOURS>
 
 #server.ssl.key-store-type=PKCS12
 #server.ssl.key-store=<DIR_OF_SSL_KEY>

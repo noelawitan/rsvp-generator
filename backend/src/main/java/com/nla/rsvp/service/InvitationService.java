@@ -4,6 +4,7 @@ import com.nla.rsvp.entity.Invitation;
 import com.nla.rsvp.repository.InvitationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,19 +14,30 @@ public class InvitationService {
     @Autowired
     private InvitationRepository invitationRepository;
 
-    public List<Invitation> getAllInvitations() {
-        return invitationRepository.findAll();
-    }
-
-    public Optional<Invitation> getInvitationById(Long id) {
+    public Optional<Invitation> getById(Long id) {
         return invitationRepository.findById(id);
     }
 
-    public Invitation saveInvitation(Invitation invitation) {
+    public List<Invitation> getAll() {
+        return invitationRepository.findAll();
+    }
+
+    public List<Invitation> getByEventId(Long eventId) {
+        return invitationRepository.findByEventId(eventId);
+    }
+
+    public Invitation save(Invitation invitation) {
         return invitationRepository.save(invitation);
     }
 
-    public void deleteInvitation(Long id) {
+    @Transactional
+    public List<Invitation> saveAll(List<Invitation> invitations) {
+        return invitationRepository.saveAll(invitations);
+    }
+
+    public void delete(Long id) {
         invitationRepository.deleteById(id);
     }
+
+
 }

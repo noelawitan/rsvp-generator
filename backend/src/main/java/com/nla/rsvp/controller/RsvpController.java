@@ -31,7 +31,7 @@ public class RsvpController extends BaseController {
     }
 
     @GetMapping("/{eventId}")
-    public ResponseEntity<EventResponse> getById(@PathVariable Long eventId) {
+    public ResponseEntity<EventResponse> getById(@PathVariable("eventId") Long eventId) {
         Optional<Event> eventOptional = eventService.getById(eventId);
 
         if (eventOptional.isPresent()) {
@@ -49,14 +49,13 @@ public class RsvpController extends BaseController {
     public ResponseEntity<EventResponse> create(@RequestBody EventRequest eventRequest) {
         Event event = convert(eventRequest, Event.class);
         event.setUser(getCurrentUser());
-
         event = eventService.save(event);
 
         return ResponseEntity.ok(convert(event, EventResponse.class));
     }
 
     @PutMapping("/{eventId}")
-    public ResponseEntity<EventResponse> update(@PathVariable Long eventId, @RequestBody EventRequest updatedEvent) {
+    public ResponseEntity<EventResponse> update(@PathVariable("eventId") Long eventId, @RequestBody EventRequest updatedEvent) {
         Optional<Event> eventOptional = eventService.getById(eventId);
 
         if (eventOptional.isPresent()) {
@@ -64,11 +63,7 @@ public class RsvpController extends BaseController {
 
             if (event.getUser().equals(getCurrentUser())) {
                 merge(updatedEvent, event);
-
                 event = eventService.save(event);
-
-                convert(event, EventResponse.class);
-
                 return ResponseEntity.ok(convert(event, EventResponse.class));
             }
         }
@@ -77,7 +72,7 @@ public class RsvpController extends BaseController {
     }
 
     @DeleteMapping("/{eventId}")
-    public ResponseEntity<Void> delete(@PathVariable Long eventId) {
+    public ResponseEntity<Void> delete(@PathVariable("eventId") Long eventId) {
         Optional<Event> eventOptional = eventService.getById(eventId);
 
         if (eventOptional.isPresent()) {
@@ -85,7 +80,6 @@ public class RsvpController extends BaseController {
 
             if (event.getUser().equals(getCurrentUser())) {
                 eventService.delete(event.getId());
-
                 return ResponseEntity.ok().build();
             }
         }
