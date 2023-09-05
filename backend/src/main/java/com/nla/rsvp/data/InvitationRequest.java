@@ -9,7 +9,7 @@ public class InvitationRequest {
     private GuestRequest guest;
     private EventRequest event;
     private Boolean attending;
-    private Integer numberOfGuest;
+    private Integer extraAttendees;
     private LocalDateTime sentDate;
     private LocalDateTime deadLine;
 }

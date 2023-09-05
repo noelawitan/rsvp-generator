@@ -31,7 +31,8 @@ public class Invitation {
 
     private Boolean attending;
 
-    private Integer numberOfGuest;
+    @Column(name = "EXTRA_ATTENDEES")
+    private Integer extraAttendees;
 
     @Column(name = "SEND_DATE")
     private LocalDateTime sentDate;

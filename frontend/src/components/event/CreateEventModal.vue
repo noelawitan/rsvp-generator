@@ -8,7 +8,7 @@
         </div>
         <div class="modal-body">
           <event-editor ref="createEventEditor" :event="event" @submitted-event="handleSubmittedEvent"
-                        @cancel="hide" />
+                        @cancel="hide"/>
         </div>
       </div>
     </div>
@@ -21,6 +21,7 @@ import EventEditor from "@/components/event/EventEditor.vue";
 
 export default {
   components: {EventEditor},
+  emits: ['submittedEvent'],
   data() {
     return {
       createEventModal: null,
@@ -59,5 +60,4 @@ export default {
     }
   }
 }
-;
 </script>

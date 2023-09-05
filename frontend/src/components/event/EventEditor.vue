@@ -64,11 +64,6 @@ export default {
       this.eventDateError = '';
       this.eventEndTimeError = '';
     },
-    submitEvent() {
-      if (this.eventNameError === '' && this.eventLocationError === '' && this.eventDateError === '' && this.eventEndTimeError === '') {
-        this.$emit('submittedEvent', this.eventObj);
-      }
-    },
     validateName() {
       if (this.eventObj.name.length < 5) {
         this.eventNameError = "Name must be at least 5 characters long.";
@@ -110,6 +105,15 @@ export default {
         }
       }
     },
+    allFieldsValid() {
+      return [this.eventNameError, this.eventLocationError, this.eventDateError, this.eventEndTimeError]
+          .every(error => error === '');
+    },
+    submitEvent() {
+      if (this.allFieldsValid()) {
+        this.$emit('submittedEvent', this.eventObj);
+      }
+    }
   }
 }
 </script>

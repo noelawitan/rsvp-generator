@@ -21,7 +21,6 @@ import EventEditor from "@/components/event/EventEditor.vue";
 
 export default {
   components: {EventEditor},
-
   props: {
     eventObj: {
       type: Object,

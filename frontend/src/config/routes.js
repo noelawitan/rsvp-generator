@@ -1,7 +1,7 @@
 import {createRouter, createWebHistory} from 'vue-router';
 import TheLogin from '@/pages/TheLogin.vue';
 import TheDashboard from '@/pages/TheDashboard.vue';
-import EventDetail from "@/components/event/EventDetail.vue";
+import EventDetail from "@/pages/EventDetail.vue";
 
 const routes = [
     {path: '/login', component: TheLogin, meta: {guestOnly: true}},
