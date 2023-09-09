@@ -8,13 +8,13 @@
                  @input="validateFirstName" placeholder="First Name">
           <div v-if="firstNameErrorMsg" class="text-danger mt-1">{{ firstNameErrorMsg }}</div>
         </div>
-        <div class="col-sm-12 col-md-5 p-md-1 mt-sm-1">
+        <div class="col-sm-12 col-md-5 p-md-1 mt-sm-1 mt-md-0">
           <input type="text" class="form-control" id="lastName" v-model="invitationObj.guest.lastName" required
                  @input="validateLastName" placeholder="Last Name">
           <div v-if="lastNameErrorMsg" class="text-danger mt-1">{{ lastNameErrorMsg }}</div>
         </div>
         <div class="col-sm-12 col-md-2 ps-md-1 mt-sm-1">
-          <input type="text" class="form-control" id="middleName" v-model="invitationObj.guest.middleName" required
+          <input type="text" class="form-control" id="middleName" v-model="invitationObj.guest.middleName"
                  @input="validateMiddleName" placeholder="M.I.">
           <div v-if="middleNameErrorMsg" class="text-danger mt-1">{{ middleNameErrorMsg }}</div>
         </div>
@@ -66,7 +66,7 @@
       </div>
       <div class="mb-3" v-if="invitationObj.sendInvitation">
         <label for="responseDeadline" class="form-label">Deadline of Response</label>
-        <input type="date" class="form-control" id="responseDeadline" v-model="invitationObj.deadline">
+        <input type="date" class="form-control" id="responseDeadline" v-model="invitationObj.deadLine">
       </div>
     </section>
     <div class="text-center">
@@ -90,7 +90,9 @@ export default {
     }
   },
   mounted() {
-    this.initializeInvitationObj(this.invitation);
+    if(this.invitation !== null) {
+      this.initializeInvitationObj(this.invitation);
+    }
   },
   methods: {
     initializeInvitationObj(invitation) {

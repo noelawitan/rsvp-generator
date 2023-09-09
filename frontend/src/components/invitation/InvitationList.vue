@@ -14,8 +14,12 @@
       <td>{{ invitation.guest.lastName }}</td>
       <td>{{ invitation.guest.email }}</td>
       <td>
-        <button class="btn btn-primary">Edit</button>
-        <button class="btn btn-danger">Remove</button>
+        <button class="btn btn-primary me-1" @click="$emit('updateInvitation', invitation.id)">
+          <i class="fa fa-pen"/>
+        </button>
+        <button class="btn btn-danger" @click="$emit('deleteInvitation', invitation.id)">
+          <i class="fa fa-trash"/>
+        </button>
       </td>
     </tr>
     </tbody>
@@ -33,6 +37,7 @@ export default {
       required: true
     }
   },
+  emits: ['updateInvitation', 'deleteInvitation'],
   data() {
     return {
       invitations: null

@@ -6,6 +6,7 @@ import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -38,7 +39,7 @@ public class Invitation {
     private LocalDateTime sentDate;
 
     @Column(name = "DEADLINE")
-    private LocalDateTime deadLine;
+    private LocalDate deadLine;
 
     @ToString.Exclude
     @NotNull

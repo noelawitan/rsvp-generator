@@ -36,7 +36,7 @@ export default {
           phoneNumber: ''
         },
         attending: null,
-        deadline: '',
+        deadLine: '',
         sendInvitation: true,
         extraAttendees: 0
       }
@@ -57,7 +57,7 @@ export default {
           phoneNumber: ''
         },
         attending: null,
-        deadline: '',
+        deadLine: '',
         sendInvitation: true
       };
     },

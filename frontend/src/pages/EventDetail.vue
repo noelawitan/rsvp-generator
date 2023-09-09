@@ -65,9 +65,11 @@
             </button>
           </div>
           <hr/>
-          <invitation-list ref="invitationListRef" :event-id="event.id"/>
+          <invitation-list ref="invitationListRef" :event-id="event.id" @delete-invitation="handleDeleteInvitation"
+                           @update-invitation="handleUpdateInvitation"/>
         </div>
-        <create-invitation-modal ref="createInvitationModalRef" @submittedInvitation="handleSubmittedInvitation"/>
+        <create-invitation-modal ref="createInvitationModalRef" @submitted-invitation="handleSubmittedInvitation"/>
+        <update-invitation-modal ref="updateInvitaitonModalRef" @submitted-invitation="handleSubmittedUpdateInvitation"/>
       </div>
       <update-event-modal ref="updateEventModalRef" @submittedEvent="handleSubmittedEvent"
                           :event-obj="event"></update-event-modal>
@@ -85,9 +87,11 @@ import {EVENT_URL, INVITATION_URL} from "@/config/config.js";
 import InvitationList from "@/components/invitation/InvitationList.vue";
 import UpdateEventModal from "@/components/event/UpdateEventModal.vue";
 import CreateInvitationModal from "@/components/invitation/CreateInvitationModal.vue";
+import UpdateInvitationModal from "@/components/invitation/UpdateInvitationModal.vue";
 
 export default {
   components: {
+    UpdateInvitationModal,
     TheNavbar,
     InvitationList,
     CreateInvitationModal,
@@ -202,11 +206,55 @@ export default {
         this.$router.push('/login');
       }
     },
+    async handleSubmittedUpdateInvitation(updatedInvitation) {
+      const accessToken = localStorage.getItem('access_token');
+
+      if (accessToken !== null) {
+        await fetch(`${INVITATION_URL}/${updatedInvitation.id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${accessToken}`
+          },
+          body: JSON.stringify(updatedInvitation),
+        })
+            .then(response => {
+              if (response.status === 403) {
+                this.$router.push('/login');
+                return;
+              }
+
+              return response.json();
+            })
+            .then(data => {
+              if (data !== null) {
+                this.$refs.updateEventModalRef.hide();
+                this.$refs.invitationListRef.getAllUserInvitation();
+              }
+            })
+            .catch((error) => {
+              // TODO: Create a modal that says there's something wrong in the server
+              console.error('Error:', error);
+            });
+      } else {
+        this.$router.push('/login');
+      }
+    },
+    handleUpdateInvitation(invitationId) {
+      this.showUpdateInvitationModal(invitationId);
+    },
+    handleDeleteInvitation(invitationId) {
+      //TODO: Create a modal for this.
+      console.log(invitationId);
+    },
     showUpdateEventModal() {
       this.$refs.updateEventModalRef.show();
     },
     showCreateInvitationModal() {
       this.$refs.createInvitationModalRef.show();
+    },
+    showUpdateInvitationModal(invitationId) {
+      this.$refs.updateInvitaitonModalRef.show(invitationId);
     }
   }
 }
