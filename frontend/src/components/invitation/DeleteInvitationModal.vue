@@ -1,15 +1,25 @@
 <template>
-  <div class="modal fade" id="updateInvitationModal" tabindex="-1" ref="myModal">
+  <div class="modal fade" id="deleteInvitationModal" tabindex="-1" ref="myModal">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">Edit Invitation</h5>
+          <h5 class="modal-title">Delete Invitation Confirmation</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
         <div class="modal-body">
-          <invitation-editor ref="updateInvitationEditor" :invitation="invitationObj"
-                             @submitted-invitation="handleSubmittedInvitation"
-                             @cancel="hide"/>
+          <div v-if="invitationObj" class="alert alert-danger">
+            <span>Are you sure you want to remove
+              <strong>
+                {{ this.invitationObj.guest.firstName }}
+                {{ this.invitationObj.guest.lastName }}
+              </strong>
+              ?
+            </span>
+          </div>
+        </div>
+        <div v-if="invitationObj" class="modal-footer">
+          <button class="btn btn-danger" @click="$emit('confirmDelete', this.invitationObj.id)">Confirm</button>
+          <button class="btn btn-secondary" @click="hide">Cancel</button>
         </div>
       </div>
     </div>
@@ -17,30 +27,21 @@
 </template>
 
 <script>
-import Modal from "bootstrap/js/dist/modal";
-import InvitationEditor from "@/components/invitation/InvitationEditor.vue";
 import {INVITATION_URL} from "@/config/config";
+import Modal from "bootstrap/js/dist/modal";
 
 export default {
-  components: {InvitationEditor},
-  emits: ['submittedInvitation'],
+  emits: ['confirmDelete'],
   data() {
     return {
-      updateInvitationModal: null,
+      deleteInvitationModal: null,
       invitationObj: null
-    };
+    }
   },
   mounted() {
-    this.updateInvitationModal = new Modal('#updateInvitationModal');
+    this.deleteInvitationModal = new Modal('#deleteInvitationModal');
   },
   methods: {
-    handleSubmittedInvitation(updatedInvitation) {
-      // Set the deadline to null if they turned off the sendInvitation.
-      if (!updatedInvitation.sendInvitation) {
-        updatedInvitation.deadLine = null;
-      }
-      this.$emit('submittedInvitation', updatedInvitation);
-    },
     show(invitationId) {
       const accessToken = localStorage.getItem('access_token');
 
@@ -61,15 +62,8 @@ export default {
               return response.json();
             })
             .then(data => {
-              if (data !== null) {
-                if ('deadLine' in data) {
-                  if (data.deadLine !== null) {
-                    data['sendInvitation'] = true;
-                  }
-                }
-                this.$refs.updateInvitationEditor.initializeInvitationObj(data);
-                this.updateInvitationModal.show();
-              }
+              this.invitationObj = data;
+              this.deleteInvitationModal.show();
             })
             .catch((error) => {
               // TODO: Create a modal that says there's something wrong in the server
@@ -80,8 +74,8 @@ export default {
       }
     },
     hide() {
-      this.updateInvitationModal.hide();
+      this.deleteInvitationModal.hide();
     }
   }
-};
+}
 </script>

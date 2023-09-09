@@ -66,7 +66,9 @@
       </div>
       <div class="mb-3" v-if="invitationObj.sendInvitation">
         <label for="responseDeadline" class="form-label">Deadline of Response</label>
-        <input type="date" class="form-control" id="responseDeadline" v-model="invitationObj.deadLine">
+        <input type="date" class="form-control" id="responseDeadline" v-model="invitationObj.deadLine"
+               @change="validateDeadLine">
+        <div v-if="deadLineErrorMsg" class="text-danger">{{ deadLineErrorMsg }}</div>
       </div>
     </section>
     <div class="text-center">
@@ -86,17 +88,23 @@ export default {
       firstNameErrorMsg: '',
       lastNameErrorMsg: '',
       middleNameErrorMsg: '',
-      emailErrorMsg: ''
+      emailErrorMsg: '',
+      deadLineErrorMsg: ''
     }
   },
   mounted() {
-    if(this.invitation !== null) {
+    if (this.invitation !== null) {
       this.initializeInvitationObj(this.invitation);
     }
   },
   methods: {
     initializeInvitationObj(invitation) {
       this.invitationObj = JSON.parse(JSON.stringify(invitation));
+      this.firstNameErrorMsg = '';
+      this.lastNameErrorMsg = '';
+      this.middleNameErrorMsg = '';
+      this.emailErrorMsg = '';
+      this.deadLineErrorMsg = '';
     },
     validateFirstName() {
       if (this.invitationObj.guest.firstName.length < 2) {
@@ -133,11 +141,27 @@ export default {
         this.emailErrorMsg = "";
       }
     },
+    validateDeadLine() {
+      const today = new Date();
+      const selectedDeadLine = new Date(this.invitationObj.deadLine);
+
+      today.setHours(0, 0, 0, 0);
+      selectedDeadLine.setHours(0, 0, 0, 0);
+
+      if (selectedDeadLine <= today || selectedDeadLine > new Date(this.invitationObj.event.date)) {
+        this.deadLineErrorMsg = "Deadline must be today or in the future and not greater than the event date.";
+      } else {
+        this.deadLineErrorMsg = "";
+      }
+    },
     allFieldsValid() {
-      return true;
+      return [this.firstNameErrorMsg, this.lastNameErrorMsg, this.middleNameErrorMsg, this.emailErrorMsg, this.deadLineErrorMsg]
+          .every(error => error === '');
     },
     submitInvitation() {
-      this.$emit('submittedInvitation', this.invitationObj);
+      if (this.allFieldsValid()) {
+        this.$emit('submittedInvitation', this.invitationObj);
+      }
     }
   }
 }

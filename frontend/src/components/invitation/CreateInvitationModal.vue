@@ -23,6 +23,12 @@ import Modal from "bootstrap/js/dist/modal";
 export default {
   components: {InvitationEditor},
   emits: ['submittedInvitation'],
+  props: {
+    eventObj: {
+      type: Object,
+      required: true
+    }
+  },
   data() {
     return {
       createInvitationModal: null,
@@ -35,6 +41,7 @@ export default {
           email: '',
           phoneNumber: ''
         },
+        event: this.eventObj,
         attending: null,
         deadLine: '',
         sendInvitation: true,
@@ -56,6 +63,7 @@ export default {
           email: '',
           phoneNumber: ''
         },
+        event: this.eventObj,
         attending: null,
         deadLine: '',
         sendInvitation: true

@@ -68,8 +68,11 @@
           <invitation-list ref="invitationListRef" :event-id="event.id" @delete-invitation="handleDeleteInvitation"
                            @update-invitation="handleUpdateInvitation"/>
         </div>
-        <create-invitation-modal ref="createInvitationModalRef" @submitted-invitation="handleSubmittedInvitation"/>
-        <update-invitation-modal ref="updateInvitaitonModalRef" @submitted-invitation="handleSubmittedUpdateInvitation"/>
+        <create-invitation-modal ref="createInvitationModalRef" :event-obj="event"
+                                 @submitted-invitation="handleSubmittedInvitation"/>
+        <update-invitation-modal ref="updateInvitationModalRef"
+                                 @submitted-invitation="handleSubmittedUpdateInvitation"/>
+        <delete-invitation-modal ref="deleteInvitationModalRef" @confirm-delete="handleConfirmedDeleteInvitation"/>
       </div>
       <update-event-modal ref="updateEventModalRef" @submittedEvent="handleSubmittedEvent"
                           :event-obj="event"></update-event-modal>
@@ -88,9 +91,11 @@ import InvitationList from "@/components/invitation/InvitationList.vue";
 import UpdateEventModal from "@/components/event/UpdateEventModal.vue";
 import CreateInvitationModal from "@/components/invitation/CreateInvitationModal.vue";
 import UpdateInvitationModal from "@/components/invitation/UpdateInvitationModal.vue";
+import DeleteInvitationModal from "@/components/invitation/DeleteInvitationModal.vue";
 
 export default {
   components: {
+    DeleteInvitationModal,
     UpdateInvitationModal,
     TheNavbar,
     InvitationList,
@@ -228,7 +233,7 @@ export default {
             })
             .then(data => {
               if (data !== null) {
-                this.$refs.updateEventModalRef.hide();
+                this.$refs.updateInvitationModalRef.hide();
                 this.$refs.invitationListRef.getAllUserInvitation();
               }
             })
@@ -240,12 +245,39 @@ export default {
         this.$router.push('/login');
       }
     },
+    async handleConfirmedDeleteInvitation(invitationId) {
+      const accessToken = localStorage.getItem('access_token');
+
+      if (accessToken !== null) {
+        await fetch(`${INVITATION_URL}/${invitationId}`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${accessToken}`
+          }
+        })
+            .then(response => {
+              if (response.status === 403) {
+                this.$router.push('/login');
+              } else if (response.status === 200) {
+                this.$refs.deleteInvitationModalRef.hide();
+                this.$refs.invitationListRef.getAllUserInvitation();
+              } else {
+                throw new Error(`Unexpected response status: ${response.status}`);
+              }
+            })
+            .catch(error => {
+              console.error('Error:', error);
+            });
+      } else {
+        this.$router.push('/login');
+      }
+    },
     handleUpdateInvitation(invitationId) {
       this.showUpdateInvitationModal(invitationId);
     },
     handleDeleteInvitation(invitationId) {
-      //TODO: Create a modal for this.
-      console.log(invitationId);
+      this.$refs.deleteInvitationModalRef.show(invitationId);
     },
     showUpdateEventModal() {
       this.$refs.updateEventModalRef.show();
@@ -254,7 +286,7 @@ export default {
       this.$refs.createInvitationModalRef.show();
     },
     showUpdateInvitationModal(invitationId) {
-      this.$refs.updateInvitaitonModalRef.show(invitationId);
+      this.$refs.updateInvitationModalRef.show(invitationId);
     }
   }
 }

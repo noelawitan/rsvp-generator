@@ -8,7 +8,7 @@
       <th>Action</th>
     </tr>
     </thead>
-    <tbody>
+    <tbody v-if="invitations">
     <tr v-for="invitation in invitations" :key="invitation.id">
       <td>{{ invitation.guest.firstName }}</td>
       <td>{{ invitation.guest.lastName }}</td>
@@ -20,6 +20,13 @@
         <button class="btn btn-danger" @click="$emit('deleteInvitation', invitation.id)">
           <i class="fa fa-trash"/>
         </button>
+      </td>
+    </tr>
+    </tbody>
+    <tbody v-else>
+    <tr>
+      <td class="text-center" colspan="4">
+        <p>No Invitation Found</p>
       </td>
     </tr>
     </tbody>
@@ -62,9 +69,13 @@ export default {
               if (response.status === 403) {
                 localStorage.clear();
                 this.$router.push('/login');
+              } else if (response.status === 200) {
+                return response.json();
+              } else if (response.status === 404) {
+                this.invitations = null;
+              } else {
+                throw new Error(`Unexpected response status: ${response.status}`);
               }
-
-              return response.json();
             })
             .then(data => {
               if (Array.isArray(data)) {
