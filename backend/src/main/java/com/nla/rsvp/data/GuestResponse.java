@@ -3,6 +3,8 @@ package com.nla.rsvp.data;
 import com.nla.rsvp.constant.Gender;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class GuestResponse {
     private Long id;
@@ -12,4 +14,5 @@ public class GuestResponse {
     private Gender gender;
     private String email;
     private String phoneNumber;
+    private List<AttendeeResponse> attendees;
 }
