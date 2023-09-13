@@ -4,7 +4,6 @@ import com.nla.rsvp.entity.Invitation;
 import com.nla.rsvp.repository.InvitationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,6 +15,10 @@ public class InvitationService {
 
     public Optional<Invitation> getById(Long id) {
         return invitationRepository.findById(id);
+    }
+
+    public Optional<Invitation> getByPublicId(String publicId) {
+        return invitationRepository.findByPublicId(publicId);
     }
 
     public List<Invitation> getAll() {
@@ -30,7 +33,6 @@ public class InvitationService {
         return invitationRepository.save(invitation);
     }
 
-    @Transactional
     public List<Invitation> saveAll(List<Invitation> invitations) {
         return invitationRepository.saveAll(invitations);
     }

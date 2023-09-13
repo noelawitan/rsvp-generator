@@ -36,10 +36,13 @@ public class Invitation {
     private Integer extraAttendees;
 
     @Column(name = "SEND_DATE")
-    private LocalDateTime sentDate;
+    private LocalDate sentDate;
 
     @Column(name = "DEADLINE")
     private LocalDate deadLine;
+
+    @Column(name = "RESPONSE_DATETIME")
+    private LocalDateTime responseDateTime;
 
     @ToString.Exclude
     @NotNull

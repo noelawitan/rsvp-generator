@@ -52,6 +52,11 @@ public class Guest {
     private List<Invitation> invitations = new ArrayList<>();
 
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @OneToMany(mappedBy = "primaryGuest", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Attendee> attendees = new ArrayList<>();
+
+    @ToString.Exclude
     @NotNull
     @ManyToOne(fetch = FetchType.EAGER)
     private User user;

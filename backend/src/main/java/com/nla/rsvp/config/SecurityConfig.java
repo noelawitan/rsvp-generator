@@ -29,6 +29,8 @@ public class SecurityConfig {
                 .authorizeRequests()
                 .antMatchers("/auth/**")
                 .permitAll()
+                .antMatchers("/public/**")
+                .permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
