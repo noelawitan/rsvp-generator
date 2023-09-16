@@ -44,7 +44,7 @@ public class PublicController extends BaseController {
 
     @PutMapping("/invitation/{invitationPublicId}")
     public ResponseEntity<Void> updateInvitationByPublicId(@PathVariable("invitationPublicId") String publicId,
-                                                                               @RequestBody PublicInvitationRequest publicInvitationRequest) {
+                                                           @RequestBody PublicInvitationRequest publicInvitationRequest) {
         if (StringUtils.hasText(publicId)) {
             Optional<Invitation> invitationOptional = invitationService.getByPublicId(publicId);
 
@@ -77,13 +77,15 @@ public class PublicController extends BaseController {
     private static List<Attendee> getAttendees(PublicInvitationRequest publicInvitationRequest, Guest guest) {
         List<Attendee> guestAttendees = new ArrayList<>();
         for (AttendeeRequest attendeeRequest : publicInvitationRequest.getAttendees()) {
-            Attendee attendee = new Attendee();
-            attendee.setFirstName(attendeeRequest.getFirstName());
-            attendee.setMiddleName(attendeeRequest.getMiddleName());
-            attendee.setLastName(attendeeRequest.getLastName());
-            attendee.setPrimaryGuest(guest);
+            if (StringUtils.hasText(attendeeRequest.getFirstName()) && StringUtils.hasText(attendeeRequest.getLastName())) {
+                Attendee attendee = new Attendee();
+                attendee.setFirstName(attendeeRequest.getFirstName());
+                attendee.setMiddleName(attendeeRequest.getMiddleName());
+                attendee.setLastName(attendeeRequest.getLastName());
+                attendee.setPrimaryGuest(guest);
 
-            guestAttendees.add(attendee);
+                guestAttendees.add(attendee);
+            }
         }
         return guestAttendees;
     }

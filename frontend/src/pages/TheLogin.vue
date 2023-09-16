@@ -12,7 +12,8 @@
           </div>
           <div class="form-group">
             <label for="password">Password</label>
-            <input type="password" class="form-control" id="password" placeholder="Password" v-model="password" required>
+            <input type="password" class="form-control" id="password" placeholder="Password" v-model="password"
+                   required>
           </div>
           <div class="form-group text-center mt-2">
             <button type="submit" class="btn btn-primary">Login</button>
@@ -24,7 +25,7 @@
 </template>
 
 <script>
-import {LOGIN_URL} from '@/config/config.js';
+import {LOGIN_URL} from '@/js/config.js';
 
 export default {
   data() {
@@ -41,6 +42,7 @@ export default {
         password: this.password
       };
 
+      this.$showLoader;
       const response = await fetch(LOGIN_URL, {
         method: 'POST',
         headers: {

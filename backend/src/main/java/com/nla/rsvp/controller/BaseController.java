@@ -32,6 +32,11 @@ public class BaseController {
         return mapper.map(obj, classType);
     }
 
+    protected <D> D convert(Object obj, Class<D> classType, MatchingStrategy matchingStrategy) {
+        ModelMapper mapper = initModelMapper(matchingStrategy);
+        return mapper.map(obj, classType);
+    }
+
     protected <S, D> List<D> convertToList(List<S> objs, Class<D> classType) {
         if (CollectionUtils.isEmpty(objs)) {
             return new ArrayList<>();

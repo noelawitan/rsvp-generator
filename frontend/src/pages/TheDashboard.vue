@@ -18,7 +18,7 @@
 <script>
 import EventList from '@/components/event/EventList.vue';
 import CreateEventModal from "@/components/event/CreateEventModal.vue";
-import {EVENT_URL} from "@/config/config.js";
+import {EVENT_URL} from "@/js/config.js";
 import TheNavbar from "@/components/TheNavbar.vue";
 
 export default {
@@ -29,6 +29,7 @@ export default {
   },
   methods: {
     async handleSubmittedEvent(newEvent) {
+      this.$loader.isVisible = true;
       const accessToken = localStorage.getItem('access_token');
 
       if (accessToken !== null) {
@@ -39,25 +40,24 @@ export default {
             'Authorization': `Bearer ${accessToken}`
           },
           body: JSON.stringify(newEvent),
-        })
-            .then(response => {
-              if (response.status === 403) {
-                this.$router.push('/login');
-                return;
-              }
+        }).then(response => {
+          if (response.status === 403) {
+            this.$router.push('/login');
+            return;
+          }
 
-              return response.json();
-            })
-            .then(data => {
-              if (data !== null) {
-                this.$refs.createEventModalRef.hide();
-                this.$refs.eventListRef.getAllUserEvents();
-              }
-            })
-            .catch((error) => {
-              // TODO: Create a modal that says there's something wrong in the server
-              console.error('Error:', error);
-            });
+          return response.json();
+        }).then(data => {
+          if (data !== null) {
+            this.$refs.createEventModalRef.hide();
+            this.$refs.eventListRef.getAllUserEvents();
+          }
+        }).catch((error) => {
+          // TODO: Create a modal that says there's something wrong in the server
+          console.error('Error:', error);
+        }).finally(() => {
+          this.$loader.isVisible = false;
+        });
       } else {
         this.$router.push('/login');
       }

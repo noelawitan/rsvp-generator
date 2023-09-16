@@ -8,11 +8,15 @@ import com.nla.rsvp.entity.Guest;
 import com.nla.rsvp.entity.Invitation;
 import com.nla.rsvp.service.EventService;
 import com.nla.rsvp.service.InvitationService;
+import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -28,10 +32,8 @@ public class InvitationController extends BaseController {
     @Autowired
     private EventService eventService;
 
-    @GetMapping("/helloWorld")
-    public String helloWorld() {
-        return "Hello World";
-    }
+    @Value("${domain.name}")
+    private String domainName;
 
     @GetMapping("/{invitationId}")
     public ResponseEntity<InvitationResponse> getInvitation(@PathVariable("invitationId") Long invitationId) {
@@ -41,7 +43,16 @@ public class InvitationController extends BaseController {
             Invitation invitation = invitationOptional.get();
 
             if (invitation.getUser().equals(getCurrentUser())) {
-                return ResponseEntity.ok(convert(invitation, InvitationResponse.class));
+                InvitationResponse invitationResponse = convert(invitation, InvitationResponse.class);
+                URI uri = ServletUriComponentsBuilder.fromHttpUrl(domainName)
+                        .path("/public/{invitationPublicId}")
+                        .buildAndExpand(invitation.getPublicId())
+                        .toUri();
+
+                String invitationUrl = uri.toString();
+                invitationResponse.setInvitationUrl(invitationUrl);
+
+                return ResponseEntity.ok(invitationResponse);
             }
         }
 
@@ -73,10 +84,9 @@ public class InvitationController extends BaseController {
                 if (!CollectionUtils.isEmpty(invitationRequests)) {
                     List<Invitation> invitations = new ArrayList<>();
                     for (InvitationRequest invitationRequest : invitationRequests) {
-                        EventRequest eventRequest = convert(event, EventRequest.class);
-                        invitationRequest.setEvent(eventRequest);
+                        invitationRequest.setEvent(null);
 
-                        Invitation invitation = convert(invitationRequest, Invitation.class);
+                        Invitation invitation = convert(invitationRequest, Invitation.class, MatchingStrategies.STANDARD);
                         invitation.setEvent(event);
                         invitation.setUser(getCurrentUser());
                         invitation.setPublicId(String.valueOf(UUID.randomUUID()));
@@ -134,5 +144,4 @@ public class InvitationController extends BaseController {
 
         return ResponseEntity.notFound().build();
     }
-
 }

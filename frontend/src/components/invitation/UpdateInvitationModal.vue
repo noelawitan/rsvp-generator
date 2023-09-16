@@ -19,7 +19,7 @@
 <script>
 import Modal from "bootstrap/js/dist/modal";
 import InvitationEditor from "@/components/invitation/InvitationEditor.vue";
-import {INVITATION_URL} from "@/config/config";
+import {INVITATION_URL} from "@/js/config";
 
 export default {
   components: {InvitationEditor},
@@ -43,6 +43,7 @@ export default {
     },
     show(invitationId) {
       const accessToken = localStorage.getItem('access_token');
+      this.$loader.isVisible = true;
 
       if (accessToken !== null) {
         fetch(`${INVITATION_URL}/${invitationId}`, {
@@ -74,6 +75,9 @@ export default {
             .catch((error) => {
               // TODO: Create a modal that says there's something wrong in the server
               console.error('Error:', error);
+            })
+            .finally(() => {
+              this.$loader.isVisible = false;
             });
       } else {
         this.$router.push('/login');

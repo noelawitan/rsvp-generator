@@ -19,7 +19,7 @@
 
 <script>
 import EventCard from "@/components/event/EventCard.vue";
-import {EVENT_URL} from "@/config/config.js";
+import {EVENT_URL} from "@/js/config.js";
 
 export default {
   components: {
@@ -36,6 +36,7 @@ export default {
   methods: {
     getAllUserEvents() {
       const accessToken = localStorage.getItem('access_token');
+      this.$loader.isVisible = true;
 
       if (accessToken !== null) {
         fetch(EVENT_URL, {
@@ -61,6 +62,9 @@ export default {
             .catch((error) => {
               // TODO: Create a modal that says there's something wrong in the server
               console.error('Error:', error);
+            })
+            .finally(() => {
+              this.$loader.isVisible = false;
             });
       } else {
         this.$router.push('/login');

@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import {INVITATION_URL} from "@/config/config";
+import {INVITATION_URL} from "@/js/config";
 import Modal from "bootstrap/js/dist/modal";
 
 export default {
@@ -44,6 +44,7 @@ export default {
   methods: {
     show(invitationId) {
       const accessToken = localStorage.getItem('access_token');
+      this.$loader.isVisible = true;
 
       if (accessToken !== null) {
         fetch(`${INVITATION_URL}/${invitationId}`, {
@@ -52,23 +53,22 @@ export default {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${accessToken}`
           }
-        })
-            .then(response => {
-              if (response.status === 403) {
-                this.$router.push('/login');
-                return;
-              }
+        }).then(response => {
+          if (response.status === 403) {
+            this.$router.push('/login');
+            return;
+          }
 
-              return response.json();
-            })
-            .then(data => {
-              this.invitationObj = data;
-              this.deleteInvitationModal.show();
-            })
-            .catch((error) => {
-              // TODO: Create a modal that says there's something wrong in the server
-              console.error('Error:', error);
-            });
+          return response.json();
+        }).then(data => {
+          this.invitationObj = data;
+          this.deleteInvitationModal.show();
+        }).catch((error) => {
+          // TODO: Create a modal that says there's something wrong in the server
+          console.error('Error:', error);
+        }).finally(() => {
+          this.$loader.isVisible = false;
+        });
       } else {
         this.$router.push('/login');
       }

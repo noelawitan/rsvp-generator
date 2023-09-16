@@ -2,17 +2,21 @@
   <table class="table table-hover">
     <thead>
     <tr>
-      <th>First Name</th>
-      <th>Last Name</th>
-      <th>Email</th>
+      <th>Name</th>
+      <th>Attending</th>
+      <th>Attendees</th>
+      <th>Response Date</th>
       <th>Action</th>
     </tr>
     </thead>
     <tbody v-if="invitations">
-    <tr v-for="invitation in invitations" :key="invitation.id">
-      <td>{{ invitation.guest.firstName }}</td>
-      <td>{{ invitation.guest.lastName }}</td>
-      <td>{{ invitation.guest.email }}</td>
+    <tr v-for="invitation in invitations" :key="invitation.id" :class="isAttendingRowBg(invitation.attending)">
+      <td @click="$emit('viewInvitation', invitation.id)" class="hyperlink-style">
+        {{ invitation.guest.firstName }} {{ invitation.guest.lastName }}
+      </td>
+      <td>{{ isAttending(invitation.attending) }}</td>
+      <td>{{ invitation.guest.attendees.length }}</td>
+      <td>{{ formatDateTime(invitation.responseDateTime) }}</td>
       <td>
         <button class="btn btn-primary me-1" @click="$emit('updateInvitation', invitation.id)">
           <i class="fa fa-pen"/>
@@ -35,7 +39,8 @@
 </template>
 
 <script>
-import {INVITATION_URL} from "@/config/config";
+import {INVITATION_URL} from "@/js/config";
+import {formatDateTime} from "@/js/utility";
 
 export default {
   props: {
@@ -44,7 +49,7 @@ export default {
       required: true
     }
   },
-  emits: ['updateInvitation', 'deleteInvitation'],
+  emits: ['viewInvitation', 'updateInvitation', 'deleteInvitation'],
   data() {
     return {
       invitations: null
@@ -54,8 +59,10 @@ export default {
     this.getAllUserInvitation();
   },
   methods: {
+    formatDateTime,
     getAllUserInvitation() {
       const accessToken = localStorage.getItem('access_token');
+      this.$loader.isVisible = true;
 
       if (accessToken !== null) {
         fetch(`${INVITATION_URL}/event/${this.eventId}`, {
@@ -64,8 +71,7 @@ export default {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${accessToken}`
           }
-        })
-            .then(response => {
+        }).then(response => {
               if (response.status === 403) {
                 localStorage.clear();
                 this.$router.push('/login');
@@ -76,20 +82,61 @@ export default {
               } else {
                 throw new Error(`Unexpected response status: ${response.status}`);
               }
-            })
-            .then(data => {
+            }).then(data => {
               if (Array.isArray(data)) {
                 this.invitations = data;
               }
-            })
-            .catch((error) => {
+            }).catch((error) => {
               // TODO: Create a modal that says there's something wrong in the server
               console.error('Error:', error);
+            }).finally(() => {
+              this.$loader.isVisible = false;
             });
       } else {
         this.$router.push('/login');
       }
+    },
+    isAttending(attending) {
+      let attendingStr = 'Undecided';
+
+      if (attending !== null) {
+        if (attending) {
+          attendingStr = 'Yes';
+        } else {
+          attendingStr = 'No';
+        }
+      }
+
+      return attendingStr;
+    },
+    isAttendingRowBg(attending) {
+      let attendingStr = '';
+
+      if (attending === null) {
+        // Undecided
+        attendingStr = 'table-secondary';
+      } else if (attending) {
+        // Attending
+        attendingStr = 'table-success';
+      } else {
+        // Not Attending
+        attendingStr = 'table-danger';
+      }
+
+      return attendingStr;
     }
   }
 };
 </script>
+
+<style scoped>
+.hyperlink-style {
+  color: blue;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.hyperlink-style:hover {
+  color: darkblue;
+}
+</style>

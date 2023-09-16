@@ -20,6 +20,7 @@ jwt.expiration.hours=<TOKEN_EXPIRATION_IN_HOURS>
 
 # Enable HTTPS
 server.port=<SERVER_PORT>
+domain.name=<DOMAIN_NAME>
 server.servlet.context-path=/api
 
 cors.allowed.origins=<ORIGINS_URL>
