@@ -13,6 +13,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/events")
@@ -57,6 +58,8 @@ public class RsvpController extends BaseController {
                 return ResponseEntity.internalServerError().build();
             }
         }
+
+        event.setPublicId(String.valueOf(UUID.randomUUID()));
         event.setUser(getCurrentUser());
         event = eventService.save(event);
 

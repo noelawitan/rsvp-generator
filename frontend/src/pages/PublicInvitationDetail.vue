@@ -10,7 +10,9 @@
           <span v-if="invitationDetails.event.endTime">&nbsp;-&nbsp;</span>
           <span v-if="invitationDetails.event.endTime">{{ formatTime(invitationDetails.event.endTime) }}</span>
         </p>
-        <p>Location: {{ invitationDetails.event.location }}</p>
+        <div class="w-50 mx-auto">
+          <p>Location: {{ invitationDetails.event.location }}</p>
+        </div>
       </div>
 
       <div class="text-center w-100 my-3">
@@ -32,7 +34,9 @@
       <p v-if="showValidationError" class="text-danger mt-2">Attending selection is required!</p>
 
       <div v-if="attending === 'true' && attendeeInputs.length > 0" class="right-text-styling w-75 mx-auto">
-        <h4>Add Attendees (up to {{ invitationDetails.extraAttendees }})</h4>
+        <div class="row">
+          <h4 class="p-0">Add Attendees (up to {{ invitationDetails.extraAttendees }})</h4>
+        </div>
         <div v-for="(attendee, index) in attendeeInputs" :key="attendee.id" class="mb-3">
           <div class="row">
             <label class="p-0 d-block">Attendee #{{ index + 1 }}</label>

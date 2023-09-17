@@ -27,6 +27,9 @@ public class Event {
     private String name;
 
     @NotNull
+    private String publicId;
+
+    @NotNull
     @Column(name = "EVENT_DATE", nullable = false)
     private LocalDate date;
 

@@ -9,7 +9,7 @@
         <div class="modal-body">
           <div v-if="redirectUrlValue">
             You will be automatically redirected to <strong>{{ eventNameValue }} </strong> website in
-            <strong>{{ seconds }} seconds</strong>, or you can <a class="link-success" @click="redirectImmediately">click here</a>
+            <strong>{{ seconds }} seconds</strong>, or you can <a href="#" class="link-success" @click="redirectImmediately">click here</a>
             to proceed immediately.
           </div>
           <div v-else>

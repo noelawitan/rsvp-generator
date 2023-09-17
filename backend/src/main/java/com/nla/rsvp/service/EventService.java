@@ -14,12 +14,16 @@ public class EventService {
     @Autowired
     private EventRepository eventRepository;
 
-    public List<Event> getAllByUser(User user) {
-        return eventRepository.findByUser(user);
-    }
-
     public Optional<Event> getById(Long id) {
         return eventRepository.findById(id);
+    }
+
+    public Optional<Event> getByPublicId(String publicId) {
+        return eventRepository.findByPublicId(publicId);
+    }
+
+    public List<Event> getAllByUser(User user) {
+        return eventRepository.findByUser(user);
     }
 
     public Event save(Event event) {

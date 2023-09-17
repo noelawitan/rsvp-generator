@@ -14,12 +14,12 @@ public class GuestService {
     @Autowired
     private GuestRepository guestRepository;
 
-    public List<Guest> getAllByUser(User user) {
-        return guestRepository.findByUser(user);
-    }
-
     public Optional<Guest> getById(Long id) {
         return guestRepository.findById(id);
+    }
+
+    public List<Guest> getAllByUser(User user) {
+        return guestRepository.findByUser(user);
     }
 
     public Guest save(Guest guest) {

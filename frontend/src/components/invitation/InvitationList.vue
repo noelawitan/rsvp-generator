@@ -29,7 +29,7 @@
     </tbody>
     <tbody v-else>
     <tr>
-      <td class="text-center" colspan="4">
+      <td class="text-center" colspan="5">
         <p>No Invitation Found</p>
       </td>
     </tr>

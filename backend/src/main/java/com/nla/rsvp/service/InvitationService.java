@@ -1,5 +1,6 @@
 package com.nla.rsvp.service;
 
+import com.nla.rsvp.entity.Event;
 import com.nla.rsvp.entity.Invitation;
 import com.nla.rsvp.repository.InvitationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,10 @@ public class InvitationService {
         return invitationRepository.findByEventId(eventId);
     }
 
+    public List<Invitation> searchInvitationsByGuestNameAndEvent(String searchGuestName, Event event) {
+        return invitationRepository.searchByGuestNameAndEvent(searchGuestName, event);
+    }
+
     public Invitation save(Invitation invitation) {
         return invitationRepository.save(invitation);
     }
@@ -40,6 +45,4 @@ public class InvitationService {
     public void delete(Long id) {
         invitationRepository.deleteById(id);
     }
-
-
 }
