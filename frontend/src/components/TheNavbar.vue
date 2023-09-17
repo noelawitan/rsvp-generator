@@ -1,5 +1,5 @@
 <template>
-  <nav class="navbar bg-dark border-bottom border-body sticky-top">
+  <nav class="navbar bg-purple border-bottom border-body sticky-top">
     <div class="container-fluid">
       <a class="navbar-brand text-white">Rsvp Generator</a>
       <form class="d-flex" @submit.prevent.stop="logout">

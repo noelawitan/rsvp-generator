@@ -45,7 +45,7 @@ public class InvitationController extends BaseController {
             if (invitation.getUser().equals(getCurrentUser())) {
                 InvitationResponse invitationResponse = convert(invitation, InvitationResponse.class);
                 URI uri = ServletUriComponentsBuilder.fromHttpUrl(domainName)
-                        .path("/public/{invitationPublicId}")
+                        .path("/public/inv/{invitationPublicId}")
                         .buildAndExpand(invitation.getPublicId())
                         .toUri();
 

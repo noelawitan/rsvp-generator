@@ -3,9 +3,9 @@
     <thead>
     <tr>
       <th>Name</th>
-      <th>Attending</th>
-      <th>Attendees</th>
-      <th>Response Date</th>
+      <th class="d-none d-sm-table-cell">Attending</th>
+      <th class="d-none d-md-table-cell">Attendees</th>
+      <th class="d-none d-lg-table-cell">Response Date</th>
       <th>Action</th>
     </tr>
     </thead>
@@ -14,9 +14,9 @@
       <td @click="$emit('viewInvitation', invitation.id)" class="hyperlink-style">
         {{ invitation.guest.firstName }} {{ invitation.guest.lastName }}
       </td>
-      <td>{{ isAttending(invitation.attending) }}</td>
-      <td>{{ invitation.guest.attendees.length }}</td>
-      <td>{{ formatDateTime(invitation.responseDateTime) }}</td>
+      <td class="d-none d-sm-table-cell">{{ isAttending(invitation.attending) }}</td>
+      <td class="d-none d-md-table-cell">{{ invitation.guest.attendees.length }}</td>
+      <td class="d-none d-lg-table-cell">{{ formatDateTime(invitation.responseDateTime) }}</td>
       <td>
         <button class="btn btn-primary me-1" @click="$emit('updateInvitation', invitation.id)">
           <i class="fa fa-pen"/>
@@ -72,26 +72,26 @@ export default {
             'Authorization': `Bearer ${accessToken}`
           }
         }).then(response => {
-              if (response.status === 403) {
-                localStorage.clear();
-                this.$router.push('/login');
-              } else if (response.status === 200) {
-                return response.json();
-              } else if (response.status === 404) {
-                this.invitations = null;
-              } else {
-                throw new Error(`Unexpected response status: ${response.status}`);
-              }
-            }).then(data => {
-              if (Array.isArray(data)) {
-                this.invitations = data;
-              }
-            }).catch((error) => {
-              // TODO: Create a modal that says there's something wrong in the server
-              console.error('Error:', error);
-            }).finally(() => {
-              this.$loader.isVisible = false;
-            });
+          if (response.status === 403) {
+            localStorage.clear();
+            this.$router.push('/login');
+          } else if (response.status === 200) {
+            return response.json();
+          } else if (response.status === 404) {
+            this.invitations = null;
+          } else {
+            throw new Error(`Unexpected response status: ${response.status}`);
+          }
+        }).then(data => {
+          if (Array.isArray(data)) {
+            this.invitations = data;
+          }
+        }).catch((error) => {
+          // TODO: Create a modal that says there's something wrong in the server
+          console.error('Error:', error);
+        }).finally(() => {
+          this.$loader.isVisible = false;
+        });
       } else {
         this.$router.push('/login');
       }
@@ -132,6 +132,7 @@ export default {
 <style scoped>
 .hyperlink-style {
   color: blue;
+  font-weight: bold;
   text-decoration: underline;
   cursor: pointer;
 }

@@ -1,7 +1,7 @@
 <template>
   <div class="row" v-if="events.length > 0">
     <event-card
-        class="col-md-4"
+        class="col-md-6 col-lg-4"
         v-for="event in events"
         :key="event.id"
         :id="event.id"

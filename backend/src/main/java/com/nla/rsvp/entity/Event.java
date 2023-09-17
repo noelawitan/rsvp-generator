@@ -41,6 +41,9 @@ public class Event {
     @Column(name = "LOCATION")
     private String location;
 
+    @Column(name = "INVITATION_RESPONSE_REDIRECT_URL")
+    private String invitationResponseRedirectUrl;
+
     @ToString.Exclude
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)

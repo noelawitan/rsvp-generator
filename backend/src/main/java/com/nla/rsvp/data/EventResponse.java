@@ -13,4 +13,5 @@ public class EventResponse {
     private LocalTime startTime;
     private LocalTime endTime;
     private String location;
+    private String invitationResponseRedirectUrl;
 }

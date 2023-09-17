@@ -28,6 +28,12 @@
              @change="validateTime">
       <div v-if="eventEndTimeError" class="text-danger">{{ eventEndTimeError }}</div>
     </div>
+    <div class="mb-3">
+      <label for="eventURL" class="form-label">Response URL Redirect (Optional)</label>
+      <input type="url" class="form-control" id="eventURL" v-model="eventObj.invitationResponseRedirectUrl"
+             @change="validateURL">
+      <div v-if="eventURLError" class="text-danger">{{ eventURLError }}</div>
+    </div>
     <div class="text-center">
       <button type="submit" class="btn btn-primary me-1">Save</button>
       <button type="button" class="btn btn-secondary ms-1" @click="$emit('cancel')">Cancel</button>
@@ -50,7 +56,8 @@ export default {
       eventNameError: '',
       eventLocationError: '',
       eventDateError: '',
-      eventEndTimeError: ''
+      eventEndTimeError: '',
+      eventURLError: ''
     }
   },
   mounted() {
@@ -63,6 +70,7 @@ export default {
       this.eventLocationError = '';
       this.eventDateError = '';
       this.eventEndTimeError = '';
+      this.eventURLError = '';
     },
     validateName() {
       if (this.eventObj.name.length < 5) {
@@ -105,8 +113,16 @@ export default {
         }
       }
     },
+    validateURL() {
+      try {
+        new URL(this.eventObj.invitationResponseRedirectUrl);
+        this.eventURLError = ''; // No error
+      } catch (_) {
+        this.eventURLError = 'Invalid URL format';
+      }
+    },
     allFieldsValid() {
-      return [this.eventNameError, this.eventLocationError, this.eventDateError, this.eventEndTimeError]
+      return [this.eventNameError, this.eventLocationError, this.eventDateError, this.eventEndTimeError, this.eventURLError]
           .every(error => error === '');
     },
     submitEvent() {

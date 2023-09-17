@@ -1,6 +1,6 @@
 <template>
   <router-view></router-view>
-  <the-loader />
+  <the-loader/>
   <the-footer/>
 </template>
 
@@ -18,12 +18,31 @@ export default {
 </script>
 
 <style>
+body {
+  background-color: #e6e0ec !important;
+}
+
 label {
   font-weight: bold;
+}
+
+.bg-purple {
+  background-color: #3c1e70 !important;
+  color: #fff !important;
 }
 
 .modal-open {
   padding-right: 0 !important;
   overflow: auto !important;
 }
+
+.modal-header {
+  background-color: #3c1e70 !important;
+  color: #fff !important;
+}
+
+.font-weight-bold {
+  font-weight: bold;
+}
+
 </style>

@@ -7,7 +7,7 @@
             <h5 class="card-title mb-0 text-truncate" style="max-width: 250px;" :title="name">
               <i class="fas fa-calendar-alt me-2"></i> {{ name }}
             </h5>
-            <small class="text-muted">{{ formatDate(date) }}</small>
+            <small class="text-truncate" :title="formatDate(date)">{{ formatDate(date) }}</small>
           </div>
           <div class="d-flex justify-content-between align-items-center">
             <p class="card-text text-truncate" style="max-width: 250px;" :title="location">

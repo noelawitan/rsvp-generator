@@ -6,14 +6,15 @@
         <hr/>
         <form @submit.prevent.stop="login">
           <div v-if="errorLogin" class="text-danger">{{ errorLogin }}</div>
-          <div class="form-group">
-            <label for="email">Email address</label>
-            <input type="email" class="form-control" id="email" placeholder="Email" v-model="email" required>
+          <div class="form-floating mb-3">
+            <input type="email" class="form-control" id="emailInput" placeholder="your-email@example.com"
+                   v-model="email" required>
+            <label for="emailInput">Email address</label>
           </div>
-          <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" class="form-control" id="password" placeholder="Password" v-model="password"
+          <div class="form-floating">
+            <input type="password" class="form-control" id="passwordInput" placeholder="Password" v-model="password"
                    required>
+            <label for="passwordInput">Password</label>
           </div>
           <div class="form-group text-center mt-2">
             <button type="submit" class="btn btn-primary">Login</button>
@@ -66,9 +67,13 @@ export default {
 
 }
 </script>
+
 <style scoped>
+label {
+  font-weight: normal;
+}
+
 .login-container {
-  background: #e2e2e2;
   width: 100%;
   position: absolute;
   top: 0;

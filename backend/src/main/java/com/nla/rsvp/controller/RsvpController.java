@@ -6,8 +6,11 @@ import com.nla.rsvp.entity.Event;
 import com.nla.rsvp.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 import java.util.Optional;
 
@@ -48,6 +51,12 @@ public class RsvpController extends BaseController {
     @PostMapping
     public ResponseEntity<EventResponse> create(@RequestBody EventRequest eventRequest) {
         Event event = convert(eventRequest, Event.class);
+
+        if (StringUtils.hasText(event.getInvitationResponseRedirectUrl())) {
+            if (!isValidUrl(event.getInvitationResponseRedirectUrl())) {
+                return ResponseEntity.internalServerError().build();
+            }
+        }
         event.setUser(getCurrentUser());
         event = eventService.save(event);
 
@@ -63,6 +72,13 @@ public class RsvpController extends BaseController {
 
             if (event.getUser().equals(getCurrentUser())) {
                 merge(updatedEvent, event);
+
+                if (StringUtils.hasText(event.getInvitationResponseRedirectUrl())) {
+                    if (!isValidUrl(event.getInvitationResponseRedirectUrl())) {
+                        return ResponseEntity.internalServerError().build();
+                    }
+                }
+
                 event = eventService.save(event);
                 return ResponseEntity.ok(convert(event, EventResponse.class));
             }
@@ -83,6 +99,21 @@ public class RsvpController extends BaseController {
                 return ResponseEntity.ok().build();
             }
         }
+
         return ResponseEntity.notFound().build();
+    }
+
+    private boolean isValidUrl(String url) {
+        boolean isValid = true;
+
+        if (StringUtils.hasText(url)) {
+            try {
+                new URL(url);
+            } catch (MalformedURLException ignored) {
+                isValid = false;
+            }
+        }
+
+        return isValid;
     }
 }

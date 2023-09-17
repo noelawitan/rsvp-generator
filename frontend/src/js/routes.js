@@ -8,7 +8,7 @@ const routes = [
     {path: '/login', component: TheLogin, meta: {guestOnly: true}},
     {path: '/dashboard', component: TheDashboard, meta: {requiresAuth: true}},
     {path: '/event-detail/:id', component: EventDetail, meta: {requiresAuth: true}},
-    {path: '/public/:publicId', component: PublicInvitationDetail, meta: {requiresAuth: false}},
+    {path: '/public/inv/:publicId', component: PublicInvitationDetail, meta: {requiresAuth: false}},
     {path: '/', redirect: '/login'}
 ];
 

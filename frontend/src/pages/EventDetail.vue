@@ -47,6 +47,16 @@
               </p>
             </div>
           </div>
+          <div v-if="event.invitationResponseRedirectUrl" class="row">
+            <div class="col-md-3">
+              <label>URL</label>
+            </div>
+            <div class="col-md-9">
+              <p>
+                <a :href="event.invitationResponseRedirectUrl" target="_blank">{{ event.invitationResponseRedirectUrl }}</a>
+              </p>
+            </div>
+          </div>
         </div>
       </div>
       <div class="card col-sm-12 col-md-12 mt-5 col-lg-7 ms-lg-5 mt-lg-0">
