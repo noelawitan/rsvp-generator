@@ -3,17 +3,21 @@ package com.nla.rsvp.controller;
 import com.nla.rsvp.data.EventRequest;
 import com.nla.rsvp.data.EventResponse;
 import com.nla.rsvp.entity.Event;
+import com.nla.rsvp.entity.Location;
 import com.nla.rsvp.service.EventService;
+import com.nla.rsvp.service.LocationService;
+import org.modelmapper.convention.MatchingStrategies;
+import org.modelmapper.spi.MatchingStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/events")
@@ -21,6 +25,9 @@ public class RsvpController extends BaseController {
 
     @Autowired
     private EventService eventService;
+
+    @Autowired
+    private LocationService locationService;
 
     @GetMapping("/helloWorld")
     public String helloWorld() {
@@ -51,13 +58,15 @@ public class RsvpController extends BaseController {
 
     @PostMapping
     public ResponseEntity<EventResponse> create(@RequestBody EventRequest eventRequest) {
-        Event event = convert(eventRequest, Event.class);
+        Event event = convert(eventRequest, Event.class, MatchingStrategies.STRICT);
 
         if (StringUtils.hasText(event.getInvitationResponseRedirectUrl())) {
             if (!isValidUrl(event.getInvitationResponseRedirectUrl())) {
                 return ResponseEntity.internalServerError().build();
             }
         }
+
+        bindLocationsToEvent(event);
 
         event.setPublicId(String.valueOf(UUID.randomUUID()));
         event.setUser(getCurrentUser());
@@ -74,13 +83,31 @@ public class RsvpController extends BaseController {
             Event event = eventOptional.get();
 
             if (event.getUser().equals(getCurrentUser())) {
+                List<Location> oldLocations = new ArrayList<>(event.getLocations());
+
                 merge(updatedEvent, event);
+
+                List<Location> newLocations = convertToList(updatedEvent.getLocations(), Location.class, MatchingStrategies.STRICT);
+
+                Set<Long> oldLocationIds = oldLocations.stream().map(Location::getId).collect(Collectors.toSet());
+                Set<Long> newLocationIds = newLocations.stream().map(Location::getId).collect(Collectors.toSet());
+
+                for (Long oldId : oldLocationIds) {
+                    if (!newLocationIds.contains(oldId)) {
+                        locationService.deleteById(oldId);
+                    }
+                }
+
+                event.getLocations().clear();
+                event.getLocations().addAll(newLocations);
 
                 if (StringUtils.hasText(event.getInvitationResponseRedirectUrl())) {
                     if (!isValidUrl(event.getInvitationResponseRedirectUrl())) {
                         return ResponseEntity.internalServerError().build();
                     }
                 }
+
+                bindLocationsToEvent(event);
 
                 event = eventService.save(event);
                 return ResponseEntity.ok(convert(event, EventResponse.class));
@@ -118,5 +145,17 @@ public class RsvpController extends BaseController {
         }
 
         return isValid;
+    }
+
+    private void bindLocationsToEvent(Event event) {
+        List<Location> locations = event.getLocations();
+
+        if (!CollectionUtils.isEmpty(locations)) {
+            for (Location location : locations) {
+                if (location.getEvent() == null) {
+                    location.setEvent(event);
+                }
+            }
+        }
     }
 }

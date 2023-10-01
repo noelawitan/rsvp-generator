@@ -1,8 +1,10 @@
 package com.nla.rsvp.entity;
 
+import com.nla.rsvp.constant.LocationTypes;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.springframework.util.CollectionUtils;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -40,9 +42,8 @@ public class Event {
     @Column(name = "END_TIME")
     private LocalTime endTime;
 
-    @NotNull
-    @Column(name = "LOCATION")
-    private String location;
+    @Column(length = 512, name = "EVENT_MESSAGE")
+    private String message;
 
     @Column(name = "INVITATION_RESPONSE_REDIRECT_URL")
     private String invitationResponseRedirectUrl;
@@ -54,6 +55,24 @@ public class Event {
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "event", cascade = CascadeType.ALL)
+    private List<Location> locations = new ArrayList<>();
+
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "event", cascade = CascadeType.ALL)
     private List<Invitation> invitations = new ArrayList<>();
+
+    @PrePersist
+    private void validate() {
+        // Validate if there's an existing Location in an event that has a Primary Location
+        if (!CollectionUtils.isEmpty(this.locations)) {
+
+            long numOfPrimaryLocation = this.locations.stream().filter(loc -> loc.getLocationType().equals(LocationTypes.PRIMARY)).count();
+
+            if (numOfPrimaryLocation > 1) {
+                throw new IllegalArgumentException("Event has already a Primary Location");
+            }
+        }
+    }
 }

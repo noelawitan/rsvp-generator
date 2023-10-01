@@ -38,11 +38,15 @@ public class BaseController {
     }
 
     protected <S, D> List<D> convertToList(List<S> objs, Class<D> classType) {
+        return convertToList(objs, classType, MatchingStrategies.LOOSE);
+    }
+
+    protected <S, D> List<D> convertToList(List<S> objs, Class<D> classType, MatchingStrategy matchingStrategy) {
         if (CollectionUtils.isEmpty(objs)) {
             return new ArrayList<>();
         }
 
-        ModelMapper mapper = initModelMapper(MatchingStrategies.LOOSE);
+        ModelMapper mapper = initModelMapper(matchingStrategy);
         return objs.stream()
                 .map(obj -> mapper.map(obj, classType))
                 .collect(Collectors.toList());

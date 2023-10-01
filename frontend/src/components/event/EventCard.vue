@@ -10,8 +10,8 @@
             <small class="text-truncate" :title="formatDate(date)">{{ formatDate(date) }}</small>
           </div>
           <div class="d-flex justify-content-between align-items-center">
-            <p class="card-text text-truncate" style="max-width: 250px;" :title="location">
-              <i class="fas fa-map-marker-alt me-2"></i> {{ location }}
+            <p class="card-text text-truncate" style="max-width: 250px;" :title="location[0].address">
+              <i class="fas fa-map-marker-alt me-2"></i> {{ location[0].name }}
             </p>
           </div>
           <div class="d-flex align-items-center">

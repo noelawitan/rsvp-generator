@@ -5,6 +5,7 @@ import com.nla.rsvp.entity.User;
 import com.nla.rsvp.repository.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -25,11 +26,12 @@ public class EventService {
     public List<Event> getAllByUser(User user) {
         return eventRepository.findByUser(user);
     }
-
+    @Transactional
     public Event save(Event event) {
         return eventRepository.save(event);
     }
 
+    @Transactional
     public void delete(Long id) {
         eventRepository.deleteById(id);
     }

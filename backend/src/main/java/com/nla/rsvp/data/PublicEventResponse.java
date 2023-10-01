@@ -1,9 +1,11 @@
 package com.nla.rsvp.data;
 
+import com.nla.rsvp.entity.Location;
 import lombok.Data;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 @Data
 public class PublicEventResponse {
@@ -12,5 +14,7 @@ public class PublicEventResponse {
     private LocalDate date;
     private LocalTime startTime;
     private LocalTime endTime;
+    private String message;
+    private List<LocationResponse> locations;
     private String location;
 }

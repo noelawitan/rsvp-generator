@@ -1,5 +1,7 @@
 <template>
-  <router-view></router-view>
+  <div class="mb-5">
+    <router-view></router-view>
+  </div>
   <the-loader/>
   <the-footer/>
 </template>

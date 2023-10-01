@@ -1,6 +1,6 @@
 <template>
   <div class="modal fade" id="createEventModal" tabindex="-1" ref="myModal">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">Create Event</h5>
@@ -27,10 +27,11 @@ export default {
       createEventModal: null,
       event: {
         name: '',
-        location: '',
+        locations: [{locationType: 'Primary', name: '', address: '', directionUrl: ''}],
         date: '',
         startTime: '',
         endTime: '',
+        message: '',
         invitationResponseRedirectUrl: ''
       },
     };
@@ -42,10 +43,11 @@ export default {
     clearData() {
       this.event = {
         name: '',
-        location: '',
+        locations: [{locationType: 'Primary', name: '', startTime: '', endTime: '', address: '', directionUrl: ''}],
         date: '',
         startTime: '',
         endTime: '',
+        message: '',
         invitationResponseRedirectUrl: ''
       };
     },

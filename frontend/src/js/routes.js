@@ -16,6 +16,7 @@ const routes = [
 
 
 const router = createRouter({
+    //history: createWebHistory('/rsvp'),
     history: createWebHistory(),
     routes
 });

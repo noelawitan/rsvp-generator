@@ -4,6 +4,7 @@ import lombok.Data;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 @Data
 public class EventResponse {
@@ -13,6 +14,7 @@ public class EventResponse {
     private LocalDate date;
     private LocalTime startTime;
     private LocalTime endTime;
-    private String location;
+    private String message;
+    private List<LocationResponse> locations;
     private String invitationResponseRedirectUrl;
 }
