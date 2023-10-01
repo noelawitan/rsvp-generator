@@ -7,7 +7,6 @@ import com.nla.rsvp.entity.Location;
 import com.nla.rsvp.service.EventService;
 import com.nla.rsvp.service.LocationService;
 import org.modelmapper.convention.MatchingStrategies;
-import org.modelmapper.spi.MatchingStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;

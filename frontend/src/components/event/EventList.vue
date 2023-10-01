@@ -7,7 +7,7 @@
         :id="event.id"
         :name="event.name"
         :date="event.date"
-        :location="event.location"
+        :location="event.locations"
         :start-time="event.startTime"
         :end-time="event.endTime">
     </event-card>

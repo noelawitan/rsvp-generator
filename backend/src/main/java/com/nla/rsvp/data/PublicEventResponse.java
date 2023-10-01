@@ -1,6 +1,5 @@
 package com.nla.rsvp.data;
 
-import com.nla.rsvp.entity.Location;
 import lombok.Data;
 
 import java.time.LocalDate;
