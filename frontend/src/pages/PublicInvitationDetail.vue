@@ -2,40 +2,59 @@
   <div v-if="invitationDetails"
        class="invitation container d-flex flex-column justify-content-center align-items-center vh-100">
     <div class="row rsvp-container">
-      <div class="text-center w-100">
-        <h2 class="my-3">{{ invitationDetails.event.name }}</h2>
+      <div class="text-center w-100 mt-5 mb-2">
+        <!-- <h2 class="my-3">{{ invitationDetails.event.name }}</h2>
         <p>Date: {{ formatDate(invitationDetails.event.date) }}</p>
         <p>
           <span>Time: {{ formatTime(invitationDetails.event.startTime) }}</span>
           <span v-if="invitationDetails.event.endTime">&nbsp;-&nbsp;</span>
           <span v-if="invitationDetails.event.endTime">{{ formatTime(invitationDetails.event.endTime) }}</span>
-        </p>
-        <div class="w-50 mx-auto">
-          <p>Location: {{ invitationDetails.event.location }}</p>
+        </p> -->
+        <div class="d-flex justify-content-center flex-column align-items-center">
+          <div class="row">
+            <h5 class="fst-italic" style="font-family: 'Merriweather', serif;">
+              You are cordially invited to our wedding.
+              Together with our families,
+            </h5>
+          </div>
+          <div class="row">
+            <h5 class="fst-italic" style="font-family: 'Merriweather', serif;">
+              We hope you can join us to celebrate.
+            </h5>
+          </div>
         </div>
       </div>
+
+      <!-- <div class="text-center w-100 my-3" v-if="invitationDetails.event.message">
+        <p class="fst-italic">
+          {{ invitationDetails.event.message }}
+        </p>
+      </div> -->
 
       <div class="text-center w-100 my-3">
         <h3>Guest: {{ invitationDetails.guest.firstName }} {{ invitationDetails.guest.middleName }}
           {{ invitationDetails.guest.lastName }}</h3>
       </div>
 
-      <div class="text-center w-100 my-3">
-        <label class="mr-3 mb-0">Are you attending?</label>&nbsp;
+      <div class="text-center w-100 mt-2">
+        <p>Will you be attending?</p>
+      </div>
+      <div class="text-center w-100">
         <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" v-model="attending" value="true" id="attendingYes">
+          <input class="form-check-input" type="radio" v-model="attending" :value="true" id="attendingYes">
           <label class="form-check-label" for="attendingYes">Attending</label>
         </div>
         <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" v-model="attending" value="false" id="attendingNo">
+          <input class="form-check-input" type="radio" v-model="attending" :value="false" id="attendingNo">
           <label class="form-check-label" for="attendingNo">Not Attending</label>
         </div>
       </div>
       <p v-if="showValidationError" class="text-danger mt-2">Attending selection is required!</p>
-
-      <div v-if="attending === 'true' && attendeeInputs.length > 0" class="right-text-styling w-75 mx-auto">
+      <br/>
+      <div v-if="attending === true && invitationDetails.extraAttendees > 0"
+           class="right-text-styling w-75 mx-auto mt-5">
         <div class="row">
-          <h4 class="p-0">Add Attendees (up to {{ invitationDetails.extraAttendees }})</h4>
+          <h4 class="p-0">Is someone else joining with you? (max of {{ invitationDetails.extraAttendees }})</h4>
         </div>
         <div v-for="(attendee, index) in attendeeInputs" :key="attendee.id" class="mb-3">
           <div class="row">
@@ -79,14 +98,19 @@
         </div>
         <div class="row">
           <button @click="addAttendee" v-if="attendeeInputs.length < invitationDetails.extraAttendees"
-                  class="col-1 btn btn-success mb-3">
+                  class="col-2 btn btn-success mb-3">
             <i class="fa fa-plus"/>
           </button>
         </div>
       </div>
-      <div class="right-text-styling w-100 mx-auto text-center">
-        <button class="btn btn-primary" @click="submit" :disabled="hasFormErrors">Submit</button>
-        <p><strong>RSVP by:</strong> {{ formatDate(invitationDetails.deadLine) }}</p>
+      <div class="right-text-styling w-100 mx-auto text-center mb-5">
+        <button class="btn btn-primary my-3" @click="submit" :disabled="hasFormErrors">Submit</button>
+        <h5 class="fst-italic">
+          Kindly RSVP by {{ formatDate(invitationDetails.deadLine) }}
+        </h5>
+        <h5 class="fst-italic">
+          Please note that this is an adults only affair. Thank you for understanding!
+        </h5>
       </div>
     </div>
     <public-invitation-success-modal :event-name="invitationDetails.event.name"
@@ -115,17 +139,21 @@ export default {
   },
   computed: {
     hasFormErrors() {
-      if (!this.attending) {
-        return true;
-      }
+      if(this.attending === null) return true;
 
-      return this.attendeeInputs.some(attendee => {
-        return !this.isValidName(attendee.firstName) ||
-            !this.isValidName(attendee.lastName) ||
-            this.hasFirstNameOnly(attendee) ||
-            this.hasLastNameOnly(attendee);
-      });
-    }
+      if (this.attending) {
+        return this.attendeeInputs.some(attendee => {
+          if (attendee.firstName || attendee.lastName) {
+            return (
+                !this.isValidName(attendee.firstName) ||
+                !this.isValidName(attendee.lastName)
+            );
+          }
+          return false;
+        });
+      }
+      return false;
+    },
   },
   mounted() {
     document.body.style.backgroundImage = "url('../../rsvp_temp.jpg')";

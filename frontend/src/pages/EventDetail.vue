@@ -12,48 +12,54 @@
           </div>
           <hr/>
           <div class="row">
-            <div class="col-md-3">
+            <div class="col-md-4">
               <label>Name</label>
             </div>
-            <div class="col-md-9">
+            <div class="col-md-8">
               <p>{{ event.name }}</p>
             </div>
           </div>
-          <div class="row">
-            <div class="col-md-3">
-              <label>Location</label>
+          <div class="row" v-for="(location, index) in event.locations" :key="location.id">
+            <div class="col-md-4">
+              <label>Location #{{ index }}</label>
             </div>
-            <div class="col-md-9">
-              <p class="text-break"
-                 :title="event.location">
-                {{ event.location }}
+            <div class="col-md-8">
+              <p>
+                <a class="text-break"
+                   target="_blank"
+                   :href="location.directionUrl"
+                   :title="location.address">
+                  {{ location.name }}
+                </a>
               </p>
             </div>
           </div>
           <div class="row">
-            <div class="col-md-3">
+            <div class="col-md-4">
               <label>Date</label>
             </div>
-            <div class="col-md-9">
+            <div class="col-md-8">
               <p>{{ formatDate(event.date) }}</p>
             </div>
           </div>
           <div class="row">
-            <div class="col-md-3">
+            <div class="col-md-4">
               <label>Time</label>
             </div>
-            <div class="col-md-9">
+            <div class="col-md-8">
               <p>{{ formatTime(event.startTime) }} <span v-if="event.endTime"> to {{ formatTime(event.endTime) }}</span>
               </p>
             </div>
           </div>
           <div v-if="event.invitationResponseRedirectUrl" class="row">
-            <div class="col-md-3">
-              <label>URL</label>
+            <div class="col-md-4">
+              <label>Redirect URL</label>
             </div>
-            <div class="col-md-9">
+            <div class="col-md-8">
               <p>
-                <a :href="event.invitationResponseRedirectUrl" target="_blank">{{ event.invitationResponseRedirectUrl }}</a>
+                <a :href="event.invitationResponseRedirectUrl" target="_blank">{{
+                    event.invitationResponseRedirectUrl
+                  }}</a>
               </p>
             </div>
           </div>
