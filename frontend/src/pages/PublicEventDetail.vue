@@ -1,7 +1,15 @@
 <template>
   <div class="container d-flex flex-column justify-content-center align-items-center vh-100">
-    <div class="row rsvp-container">
-      <div class="input-group mb-3">
+    <div class="row rsvp-container mb-2">
+      <div class="text-center w-100 mt-2 mb-2">
+        <div class="d-flex justify-content-center flex-column align-items-center">
+          <h5>
+            Please enter your name below to confirm your invitation for our wedding.
+          </h5>
+        </div>
+      </div>
+      <hr/>
+      <div class="input-group">
         <span class="bg-purple input-group-text" style="border:none;">
           <i class="fas fa-search"></i>
         </span>
@@ -10,22 +18,22 @@
                  @input="onInput">
           <label for="searchGuestInput" style="color:#cccccc">Search Guest</label>
         </div>
-        <span class="input-group-text">
-          <div class="spinner-border spinner-border-sm" role="status" v-if="loading">
+        <span class="bg-purple input-group-text" style="border:none;min-width:40px;">
+          <span class="spinner-border spinner-border-sm" role="status" v-if="loading">
             <span class="visually-hidden">Loading...</span>
-          </div>
+          </span>
         </span>
       </div>
     </div>
-    <div class="autocomplete">
-      <div class="autocomplete-results" v-if="results.length">
+    <div class="autocomplete w-75">
+      <div class="autocomplete-results text-center py-1 fs-5 text fw-bold" v-if="results.length">
         <a
             v-for="item in results"
             :key="item.guestName"
             :href="item.invitationUrl"
-            class="autocomplete-result"
+            class="autocomplete-result text-decoration-none"
         >
-          {{ item.guestName }}
+          <p class="mb-0"><i class="fas fa-user"/> {{ item.guestName }}</p>
         </a>
       </div>
     </div>
@@ -90,5 +98,11 @@ export default {
   background: rgb(0 0 0 / 60%);
   color: white;
   border-radius: 1%;
+}
+
+.autocomplete-results {
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 </style>

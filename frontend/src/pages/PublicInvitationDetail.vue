@@ -1,6 +1,6 @@
 <template>
   <div v-if="invitationDetails"
-       class="invitation container d-flex flex-column justify-content-center align-items-center vh-100">
+       class="container d-flex flex-column justify-content-center align-items-center vh-100">
     <div class="row rsvp-container">
       <div class="text-center w-100 mt-5 mb-2">
         <!-- <h2 class="my-3">{{ invitationDetails.event.name }}</h2>
@@ -250,8 +250,14 @@ export default {
 
 <style scoped>
 .rsvp-container {
-  background: rgb(0 0 0 / 60%);
-  color: white;
-  border-radius: 1%;
+  background: rgba(0, 0, 0, 0.7); /* Semi-transparent black */
+  color: #EFEFEF; /* Light gray text color */
+  border-radius: 5px;
+  padding: 20px;
+}
+
+/* If you want to highlight links or specific text differently, you can add additional styles: */
+.rsvp-container a {
+  color: #FFD700; /* Example: Gold color for links */
 }
 </style>
